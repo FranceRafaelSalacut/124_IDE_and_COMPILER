@@ -8,12 +8,15 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("temp.ui", self)
 
-        self.New_File_Button.clicked.connect(self.clickhandler)
-        self.Open_File_Button.clicked.connect(self.clickhandler)
+        self.New_File_Button.clicked.connect(self.Fclickhandler)
+        self.Open_File_Button.clicked.connect(self.Oclickhandler)
 
 
-    def clickhandler(self):
-        print("Testingignign")
+    def Fclickhandler(self):
+        print("NEW FILE")
+
+    def Oclickhandler(self):
+        print("OPEN FILE")
 
 
 def main():
