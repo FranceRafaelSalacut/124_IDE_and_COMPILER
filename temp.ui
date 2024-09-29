@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>787</width>
     <height>600</height>
    </rect>
   </property>
@@ -38,6 +38,42 @@
     </property>
     <property name="text">
      <string>Open File</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="Code_Area">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>30</y>
+      <width>521</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Compile_Button">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Compile</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Execute_Button">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Execute</string>
     </property>
    </widget>
   </widget>
