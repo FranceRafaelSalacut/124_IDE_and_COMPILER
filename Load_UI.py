@@ -77,7 +77,6 @@ class MainUI(QMainWindow):
             self.Current_File = file.name
 
 
-
 def main():
     app = QApplication (sys.argv)
     ui = MainUI()
