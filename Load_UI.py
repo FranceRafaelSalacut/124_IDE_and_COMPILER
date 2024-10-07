@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QUndoStack
-from PyQt5.QtGui import QKeySequence
+from PyQt5.QtGui import QKeySequence, QGuiApplication
 from PyQt5.uic import loadUi
 from tkinter import *
 from tkinter import filedialog
@@ -12,6 +12,7 @@ class MainUI(QMainWindow):
         loadUi("temp.ui", self)
         self.Code = "Empty"
         self.UndoStack = QUndoStack(self)
+        self.ClipBoard = QGuiApplication.clipboard()
 
         self.Code_Area.setReadOnly(True)
         self.New_File_Button.clicked.connect(self.New_File)
@@ -26,11 +27,15 @@ class MainUI(QMainWindow):
         self.Execute_Button.clicked.connect(self.Execute)
         self.Execute_Button.setToolTip("Compile and Execute Program")
 
-        Undo = QShortcut(QKeySequence("Ctrl+Z"), self)
-        Redo = QShortcut(QKeySequence("Ctrl+Y"), self)
+        Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
+        Redo = QShortcut(QKeySequence("Ctrl+W"), self)
+        Copy = QShortcut(QKeySequence("Ctrl+C"), self)
+        Paste = QShortcut(QKeySequence("Ctrl+V"), self)
 
         Undo.activated.connect(self.Undo)
         Redo.activated.connect(self.Redo)
+        Copy.activated.connect(self.Copy)
+        Paste.activated.connect(self.Paste)
 
 
     def New_File(self):
@@ -61,6 +66,12 @@ class MainUI(QMainWindow):
     def Redo(self):
         print("Redigit")
         self.UndoStack.redo()
+
+    def Copy(self):
+        self.ClipBoard.setMimeData()
+
+    def Paste(self):
+        self.ClipBoard.mimeData()
 
 def main():
     app = QApplication (sys.argv)
