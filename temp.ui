@@ -76,6 +76,32 @@
      <string>Execute</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="Save_Button">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>150</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Save_As_Button">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>180</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save As</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
