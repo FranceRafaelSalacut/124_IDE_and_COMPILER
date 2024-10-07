@@ -11,7 +11,6 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("temp.ui", self)
         self.Code = "Empty"
-        self.UndoStack = QUndoStack(self)
         self.ClipBoard = QGuiApplication.clipboard()
 
         self.Code_Area.setReadOnly(True)
@@ -27,6 +26,8 @@ class MainUI(QMainWindow):
         self.Execute_Button.clicked.connect(self.Execute)
         self.Execute_Button.setToolTip("Compile and Execute Program")
 
+        # self.Code_Area.textChanged.connect(self.Text_Change)
+
         Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
         Redo = QShortcut(QKeySequence("Ctrl+W"), self)
         Copy = QShortcut(QKeySequence("Ctrl+C"), self)
@@ -37,6 +38,9 @@ class MainUI(QMainWindow):
         Copy.activated.connect(self.Copy)
         Paste.activated.connect(self.Paste)
 
+    def Text_Change(self):
+        self.UndoStack.text(self.Code_Area.toPlainText())
+        self.Compile()
 
     def New_File(self):
         print("Will open a new file in the Dialog Box")
@@ -61,11 +65,11 @@ class MainUI(QMainWindow):
 
     def Undo(self):
         print("Undid")
-        self.UndoStack.undo()
+        self.Code_Area.undo()
 
     def Redo(self):
         print("Redigit")
-        self.UndoStack.redo()
+        self.Code_Area.redo()
 
     def Copy(self):
         self.ClipBoard.setMimeData()
