@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QUndoStack
-from PyQt5.QtGui import QKeySequence, QGuiApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut
+from PyQt5.QtGui import QKeySequence
 from PyQt5.uic import loadUi
 from tkinter import *
 from tkinter import filedialog
@@ -11,7 +11,6 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("temp.ui", self)
         self.Code = "Empty"
-        self.ClipBoard = QGuiApplication.clipboard()
 
         self.Code_Area.setReadOnly(True)
         self.New_File_Button.clicked.connect(self.New_File)
@@ -30,12 +29,14 @@ class MainUI(QMainWindow):
 
         Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
         Redo = QShortcut(QKeySequence("Ctrl+W"), self)
-        Copy = QShortcut(QKeySequence("Ctrl+C"), self)
-        Paste = QShortcut(QKeySequence("Ctrl+V"), self)
+        Copy = QShortcut(QKeySequence("Ctrl+E"), self)
+        Cut = QShortcut(QKeySequence("Ctrl+R"), self)
+        Paste = QShortcut(QKeySequence("Ctrl+T"), self)
 
         Undo.activated.connect(self.Undo)
         Redo.activated.connect(self.Redo)
         Copy.activated.connect(self.Copy)
+        Cut.activated.connect(self.Cut)
         Paste.activated.connect(self.Paste)
 
     def Text_Change(self):
@@ -72,10 +73,16 @@ class MainUI(QMainWindow):
         self.Code_Area.redo()
 
     def Copy(self):
-        self.ClipBoard.setMimeData()
+        print("Copycat")
+        self.Code_Area.copy()
+
+    def Cut(self):
+        print("Aray")
+        self.Code_Area.cut()
 
     def Paste(self):
-        self.ClipBoard.mimeData()
+        print("Glue")
+        self.Code_Area.paste()
 
 def main():
     app = QApplication (sys.argv)
