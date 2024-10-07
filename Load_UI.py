@@ -12,7 +12,9 @@ class MainUI(QMainWindow):
         loadUi("temp.ui", self)
         self.Code = "Empty"
         self.Current_File: str = ""
+        # self.Code_Area.textChanged.connect(self.Text_Change)
 
+        # button clicks and tool tips
         self.Code_Area.setReadOnly(True)
         self.New_File_Button.clicked.connect(self.New_File)
         self.New_File_Button.setToolTip("Create New File")
@@ -26,30 +28,11 @@ class MainUI(QMainWindow):
         self.Execute_Button.clicked.connect(self.Execute)
         self.Execute_Button.setToolTip("Compile and Execute Program")
 
-        # self.Code_Area.textChanged.connect(self.Text_Change)
-
-        Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
-        Redo = QShortcut(QKeySequence("Ctrl+W"), self)
-        Copy = QShortcut(QKeySequence("Ctrl+E"), self)
-        Cut = QShortcut(QKeySequence("Ctrl+R"), self)
-        Paste = QShortcut(QKeySequence("Ctrl+T"), self)
-
-        Undo.activated.connect(self.Undo)
-        Redo.activated.connect(self.Redo)
-        Copy.activated.connect(self.Copy)
-        Cut.activated.connect(self.Cut)
-        Paste.activated.connect(self.Paste)
-
-    def Text_Change(self):
-        self.UndoStack.text(self.Code_Area.toPlainText())
-        self.Compile()
-        # button clicks
-        self.New_File_Button.clicked.connect(self.New_File)
-        self.Open_File_Button.clicked.connect(self.Open_File)
-        self.Compile_Button.clicked.connect(self.Compile)
-        self.Execute_Button.clicked.connect(self.Execute)
         self.Save_Button.clicked.connect(self.Save)
+        self.Save_Button.setToolTip("Save Current File")
+
         self.Save_As_Button.clicked.connect(self.Save_As)
+        self.Save_As_Button.setToolTip("Save File As")
 
         # button shortcuts
         New_File_Shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
@@ -57,10 +40,28 @@ class MainUI(QMainWindow):
         Save_Shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
         Save_As_Shortcut = QShortcut(QKeySequence("Ctrl+Shift+S"), self)
 
+        Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
+        Redo = QShortcut(QKeySequence("Ctrl+W"), self)
+        Copy = QShortcut(QKeySequence("Ctrl+E"), self)
+        Cut = QShortcut(QKeySequence("Ctrl+R"), self)
+        Paste = QShortcut(QKeySequence("Ctrl+T"), self)
+
         New_File_Shortcut.activated.connect(self.New_File)
         Open_File_Shortcut.activated.connect(self.Open_File)
         Save_Shortcut.activated.connect(self.Save)
         Save_As_Shortcut.activated.connect(self.Save_As)
+
+        Undo.activated.connect(self.Undo)
+        Redo.activated.connect(self.Redo)
+        Copy.activated.connect(self.Copy)
+        Cut.activated.connect(self.Cut)
+        Paste.activated.connect(self.Paste)
+
+        
+    
+    def Text_Change(self):
+        self.UndoStack.text(self.Code_Area.toPlainText())
+        self.Compile()
 
     def New_File(self):
         print("Will open a new file in the Dialog Box")
