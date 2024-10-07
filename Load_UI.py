@@ -11,14 +11,23 @@ class MainUI(QMainWindow):
         loadUi("temp.ui", self)
         self.Code = "Empty"
 
+        self.Code_Area.setReadOnly(True)
         self.New_File_Button.clicked.connect(self.New_File)
+        self.New_File_Button.setToolTip("Create New File")
+
         self.Open_File_Button.clicked.connect(self.Open_File)
+        self.Open_File_Button.setToolTip("Oper New File")
+
         self.Compile_Button.clicked.connect(self.Compile)
+        self.Compile_Button.setToolTip("Compile Program")
+
         self.Execute_Button.clicked.connect(self.Execute)
+        self.Execute_Button.setToolTip("Compile and Execute Program")
 
 
     def New_File(self):
         print("Will open a new file in the Dialog Box")
+        self.Code_Area.setReadOnly(False)
 
     def Open_File(self):
         file = filedialog.askopenfile()
