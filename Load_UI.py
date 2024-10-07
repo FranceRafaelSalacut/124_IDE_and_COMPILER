@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication
+from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QUndoStack
+from PyQt5.QtGui import QKeySequence
 from PyQt5.uic import loadUi
 from tkinter import *
 from tkinter import filedialog
@@ -10,6 +11,7 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("temp.ui", self)
         self.Code = "Empty"
+        self.UndoStack = QUndoStack(self)
 
         self.Code_Area.setReadOnly(True)
         self.New_File_Button.clicked.connect(self.New_File)
@@ -23,6 +25,12 @@ class MainUI(QMainWindow):
 
         self.Execute_Button.clicked.connect(self.Execute)
         self.Execute_Button.setToolTip("Compile and Execute Program")
+
+        Undo = QShortcut(QKeySequence("Ctrl+Z"), self)
+        Redo = QShortcut(QKeySequence("Ctrl+Y"), self)
+
+        Undo.activated.connect(self.Undo)
+        Redo.activated.connect(self.Redo)
 
 
     def New_File(self):
@@ -46,6 +54,13 @@ class MainUI(QMainWindow):
     def Execute(self):
         print(self.Code)
 
+    def Undo(self):
+        print("Undid")
+        self.UndoStack.undo()
+
+    def Redo(self):
+        print("Redigit")
+        self.UndoStack.redo()
 
 def main():
     app = QApplication (sys.argv)
