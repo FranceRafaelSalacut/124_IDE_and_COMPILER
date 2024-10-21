@@ -5,11 +5,15 @@ from tkinter import *
 from tkinter import filedialog
 import sys
 
+#FEFAE0
+#291720
 
 class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
-        loadUi("temp.ui", self)
+        loadUi('124-Brainrot-Language.ui', self)
+        # loadUi('temp.ui', self)
+
         self.Code = "Empty"
         self.Current_File: str = ""
         # self.Code_Area.textChanged.connect(self.Text_Change)
@@ -20,7 +24,7 @@ class MainUI(QMainWindow):
         self.New_File_Button.setToolTip("Create New File")
 
         self.Open_File_Button.clicked.connect(self.Open_File)
-        self.Open_File_Button.setToolTip("Oper New File")
+        self.Open_File_Button.setToolTip("Open New File")
 
         self.Compile_Button.clicked.connect(self.Compile)
         self.Compile_Button.setToolTip("Compile Program")
@@ -33,6 +37,22 @@ class MainUI(QMainWindow):
 
         self.Save_As_Button.clicked.connect(self.Save_As)
         self.Save_As_Button.setToolTip("Save File As")
+
+        self.Undo_Button.clicked.connect(self.Undo)
+        self.Undo_Button.setToolTip("Undo")
+
+        self.Redo_Button.clicked.connect(self.Redo)
+        self.Redo_Button.setToolTip("Redo")
+
+        self.Copy_Button.clicked.connect(self.Copy)
+        self.Copy_Button.setToolTip("Copy")
+
+        self.Cut_Button.clicked.connect(self.Cut)
+        self.Cut_Button.setToolTip("Cut")
+
+        self.Paste_Button.clicked.connect(self.Paste)
+        self.Paste_Button.setToolTip("Paste")
+        
 
         # button shortcuts
         New_File_Shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
@@ -99,10 +119,11 @@ class MainUI(QMainWindow):
     def Save_As(self):
         text = self.Code_Area.toPlainText()
         file = filedialog.asksaveasfile(defaultextension='.txt',
-                                    filetypes=[
-                                        ("Text", ".txt"),
-                                        ("All files", ".*")
-                                        ])
+                                        filetypes=[
+                                                ("Text", ".txt"),
+                                                ("All files", ".*")
+                                            ]
+                                        )
         if(file):
             file.write(text)
             file.close()
