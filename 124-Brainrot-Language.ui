@@ -1,0 +1,475 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #291720;
+
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="FileNameWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>0</y>
+      <width>621</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f7a2a0; 
+</string>
+    </property>
+    <layout class="QHBoxLayout" name="FileName">
+     <item>
+      <widget class="QLineEdit" name="CurrentFileName">
+       <property name="styleSheet">
+        <string notr="true">margin-right: 50px;
+margin-left: 50px;
+border: none;
+color: #fef9e0;
+text-align: center;</string>
+       </property>
+       <property name="text">
+        <string>Untitled</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalWidget_3" native="true">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>430</y>
+      <width>731</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f7a2a0; </string>
+    </property>
+    <layout class="QHBoxLayout" name="ExecuteSection"/>
+   </widget>
+   <widget class="QGroupBox" name="horizontalGroupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>0</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f7a2a0; </string>
+    </property>
+    <layout class="QHBoxLayout" name="UpperRightPanel">
+     <item>
+      <widget class="QPushButton" name="Open_File_Button_8">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Compile_image.png</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Execute_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Execute_image.png</normalon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="SidePanel_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>71</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f7a2a0; </string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>-1</number>
+     </property>
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="FileManagement" native="true">
+       <property name="styleSheet">
+        <string notr="true">border:none;
+text-align: center;</string>
+       </property>
+       <layout class="QVBoxLayout" name="SidePanel">
+        <property name="leftMargin">
+         <number>1</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="New_File_Button">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;
+
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>button-images/New_File_image.png</normalon>
+            <disabledoff>button-images/gray_New_File_image.png</disabledoff>
+            <disabledon>button-images/gray_New_File_image.png</disabledon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Open_File_Button">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;
+
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>button-images/Open_File_image.png</normalon>
+            <disabledoff>button-images/gray_Open_File_image.png</disabledoff>
+            <disabledon>button-images/gray_Open_File_image.png</disabledon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Save_Button">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;
+
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>button-images/Save_image.png</normalon>
+            <disabledoff>button-images/gray_Save_image.png</disabledoff>
+            <disabledon>button-images/gray_Save_image.png</disabledon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Save_As_Button">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;
+
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>button-images/Save_As_image.png</normalon>
+            <disabledoff>button-images/gray_Save_As_image.png</disabledoff>
+            <disabledon>button-images/gray_Save_As_image.png</disabledon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Close_File_Button">
+          <property name="styleSheet">
+           <string notr="true">background: transparent;
+
+</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normalon>button-images/Close_File_image.png</normalon>
+            <disabledoff>button-images/gray_Close_File_image.png</disabledoff>
+            <disabledon>button-images/gray_Close_File_image.png</disabledon>
+           </iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>30</width>
+            <height>30</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QGroupBox" name="EditSection_2">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>380</y>
+      <width>231</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 2px solid #f7a2a0; </string>
+    </property>
+    <layout class="QHBoxLayout" name="EditSection">
+     <item>
+      <widget class="QPushButton" name="Cut_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Cut_image.png</normalon>
+         <disabledoff>button-images/gray_Cut_image.png</disabledoff>
+         <disabledon>button-images/gray_Cut_image.png</disabledon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Copy_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Copy_image.png</normalon>
+         <disabledoff>button-images/gray_Copy_image.png</disabledoff>
+         <disabledon>button-images/gray_Copy_image.png</disabledon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Paste_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Paste_image.png</normalon>
+         <disabledoff>button-images/gray_Paste_image.png</disabledoff>
+         <disabledon>button-images/gray_Paste_image.png</disabledon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>30</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Undo_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Undo_image.png</normalon>
+         <disabledoff>button-images/gray_Undo_image.png</disabledoff>
+         <disabledon>button-images/gray_Undo_image.png</disabledon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Redo_Button">
+       <property name="styleSheet">
+        <string notr="true">background: transparent;
+border:none;
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>button-images/Redo_image.png</normalon>
+         <disabledoff>button-images/gray_Redo_image.png</disabledoff>
+         <disabledon>button-images/gray_Redo_image.png</disabledon>
+        </iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTextEdit" name="CodeEditor">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>40</y>
+      <width>721</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #fef9e0;         
+padding: 10px;     
+margin: 10px;  
+border:none;</string>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <zorder>CodeEditor</zorder>
+   <zorder>FileNameWidget</zorder>
+   <zorder>horizontalWidget_3</zorder>
+   <zorder>horizontalGroupBox_2</zorder>
+   <zorder>SidePanel_2</zorder>
+   <zorder>EditSection_2</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
