@@ -30,6 +30,8 @@ class WelcomeDialog(QMainWindow):
     def on_media_status_changed(self, status):
         if status == QMediaPlayer.EndOfMedia:
             self.close()
+            self.MainUI = MainUI()
+            self.MainUI.show()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
