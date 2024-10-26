@@ -12,6 +12,7 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi("124-Brainrot-Language.ui", self)
 
+
 class WelcomeDialog(QMainWindow):
     def __init__(self):
         super(WelcomeDialog, self).__init__()
@@ -22,7 +23,7 @@ class WelcomeDialog(QMainWindow):
         self.player = QMediaPlayer(self, QMediaPlayer.VideoSurface)
         self.player.setVideoOutput(video_widget)
         self.player.stop()
-        path = "pebertdey.wmv"
+        path = "welcome-video.mov"
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(path)))
         self.player.play()
         self.player.mediaStatusChanged.connect(self.on_media_status_changed)
@@ -38,3 +39,4 @@ if __name__ == "__main__":
     window = WelcomeDialog()
     window.show()
     sys.exit(app.exec_())
+
