@@ -80,7 +80,7 @@ text-align: center;</string>
     </property>
     <layout class="QHBoxLayout" name="UpperRightPanel">
      <item>
-      <widget class="QPushButton" name="Compile_Button">
+      <widget class="QPushButton" name="Open_File_Button_8">
        <property name="styleSheet">
         <string notr="true">background: transparent;
 border:none;
@@ -142,7 +142,7 @@ border:none;
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
-      <number>6</number>
+      <number>-1</number>
      </property>
      <property name="leftMargin">
       <number>5</number>
@@ -439,7 +439,7 @@ border:none;
      </item>
     </layout>
    </widget>
-   <widget class="QTextEdit" name="Code_Area">
+   <widget class="QTextEdit" name="CodeEditor">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -458,8 +458,8 @@ border:none;</string>
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'.AppleSystemUIFont'; font-size:13pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <zorder>CodeEditor</zorder>
