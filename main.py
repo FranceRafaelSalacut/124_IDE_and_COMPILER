@@ -23,7 +23,7 @@ class WelcomeDialog(QMainWindow):
         self.player = QMediaPlayer(self, QMediaPlayer.VideoSurface)
         self.player.setVideoOutput(video_widget)
         self.player.stop()
-        path = "welcome-video.mov"
+        path = "welcome-video.wmv"
         self.player.setMedia(QMediaContent(QUrl.fromLocalFile(path)))
         self.player.play()
         self.player.mediaStatusChanged.connect(self.on_media_status_changed)
