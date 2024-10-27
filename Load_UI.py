@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox
 from PyQt5.QtGui import QKeySequence
 from PyQt5.uic import loadUi
 from tkinter import *
@@ -9,6 +10,7 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi('124-Brainrot-Language.ui', self)
+        
         
         self.Code = "Empty"
         self.Current_File: str = ""
@@ -23,6 +25,13 @@ class MainUI(QMainWindow):
 
         # editor states
         self.Code_Area.setReadOnly(True)
+        self.CurrentFileName.setReadOnly(True)
+
+        # placeholders
+        self.Code_Area.setText("Create or open a file to get started")
+        self.CurrentFileName.setText("Welcome")
+
+        # button clicks and tool tips
         self.CurrentFileName.setReadOnly(True)
 
         # placeholders
@@ -62,6 +71,7 @@ class MainUI(QMainWindow):
 
         self.Paste_Button.clicked.connect(self.Paste)
         self.Paste_Button.setToolTip("Paste")
+        
         
         # button shortcuts
         New_File_Shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
@@ -105,16 +115,23 @@ class MainUI(QMainWindow):
     def New_File(self):
         if not self.Prompt_Save_Changes():
             return
+        if not self.Prompt_Save_Changes():
+            return
         print("Will open a new file in the Dialog Box")
+        self.Current_File = ""
+        self.SetActiveEditor()
         self.Current_File = ""
         self.SetActiveEditor()
 
     def Open_File(self):
         if not self.Prompt_Save_Changes():
             return
+        if not self.Prompt_Save_Changes():
+            return
         file = filedialog.askopenfile()
         if(file):
             self.Current_File = file.name
+            self.SetActiveEditor(file.name.split('/')[-1])
             self.SetActiveEditor(file.name.split('/')[-1])
             Txt = ""
             for line in file:
@@ -183,6 +200,29 @@ class MainUI(QMainWindow):
 
     def Prompt_Save_Changes(self):
         if self.Modified:
+            reply = QMessageBox.question(
+                self, "Unsaved Changes",
+                "You have unsaved changes. Would you like to save them?",
+                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+            )
+            if reply == QMessageBox.Yes:
+                self.save_file()
+                return True  # Proceed with the action
+            elif reply == QMessageBox.No:
+                return True  # Proceed without saving
+            else:
+                return False  # Cancel the action
+        return True  # No unsaved changes, proceed
+
+    def closeEvent(self, event):
+        # Prompt to save changes when closing the application.
+        if self.Prompt_Save_Changes():
+            event.accept()  # Close the window
+        else:
+            event.ignore()  # Cancel the close
+
+    def Prompt_Save_Changes(self):
+        if not self.Is_Saved:
             reply = QMessageBox.question(
                 self, "Unsaved Changes",
                 "You have unsaved changes. Would you like to save them?",
