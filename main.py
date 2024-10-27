@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QSizeGrip
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -11,6 +11,7 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi("124-Brainrot-Language.ui", self)
+        # QSizeGrip(self.ui.size.grip)
 
 class WelcomeDialog(QMainWindow):
     def __init__(self, main_ui):
