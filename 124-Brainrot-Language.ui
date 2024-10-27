@@ -67,7 +67,7 @@ color: #fef9e0;
 text-align: center;</string>
        </property>
        <property name="text">
-        <string>Untitled</string>
+        <string>Create or Open File to get Started</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

@@ -7,10 +7,13 @@ from PyQt5.QtCore import QUrl
 import sys
 import os
 
-class MainUI(QMainWindow):
-    def __init__(self):
-        super(MainUI, self).__init__()
-        loadUi("124-Brainrot-Language.ui", self)
+from Load_UI import MainUI 
+
+
+# class MainUI(QMainWindow):
+#     def __init__(self):
+#         super(MainUI, self).__init__()
+#         loadUi("124-Brainrot-Language.ui", self)
 
 class WelcomeDialog(QMainWindow):
     def __init__(self, main_ui):
