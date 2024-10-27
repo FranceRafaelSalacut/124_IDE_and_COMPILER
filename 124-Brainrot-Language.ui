@@ -184,7 +184,7 @@ border:none;
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
-      <number>-1</number>
+      <number>6</number>
      </property>
      <property name="leftMargin">
       <number>5</number>
@@ -223,7 +223,21 @@ text-align: center;</string>
         <item>
          <widget class="QPushButton" name="New_File_Button">
           <property name="styleSheet">
-           <string notr="true">background: transparent;
+           <string notr="true">QPushButton{
+	background: transparent;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
 
 </string>
           </property>
@@ -248,7 +262,21 @@ text-align: center;</string>
         <item>
          <widget class="QPushButton" name="Open_File_Button">
           <property name="styleSheet">
-           <string notr="true">background: transparent;
+           <string notr="true">QPushButton{
+	background: transparent;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
 
 </string>
           </property>
@@ -273,7 +301,21 @@ text-align: center;</string>
         <item>
          <widget class="QPushButton" name="Save_Button">
           <property name="styleSheet">
-           <string notr="true">background: transparent;
+           <string notr="true">QPushButton{
+	background: transparent;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
 
 </string>
           </property>
@@ -298,7 +340,21 @@ text-align: center;</string>
         <item>
          <widget class="QPushButton" name="Save_As_Button">
           <property name="styleSheet">
-           <string notr="true">background: transparent;
+           <string notr="true">QPushButton{
+	background: transparent;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
 
 </string>
           </property>
@@ -323,7 +379,21 @@ text-align: center;</string>
         <item>
          <widget class="QPushButton" name="Close_File_Button">
           <property name="styleSheet">
-           <string notr="true">background: transparent;
+           <string notr="true">QPushButton{
+	background: transparent;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
 
 </string>
           </property>
@@ -379,8 +449,23 @@ text-align: center;</string>
      <item>
       <widget class="QPushButton" name="Cut_Button">
        <property name="styleSheet">
-        <string notr="true">background: transparent;
-border:none;
+        <string notr="true">QPushButton{
+	background: transparent;
+	border: none;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
+
 </string>
        </property>
        <property name="text">
@@ -404,8 +489,23 @@ border:none;
      <item>
       <widget class="QPushButton" name="Copy_Button">
        <property name="styleSheet">
-        <string notr="true">background: transparent;
-border:none;
+        <string notr="true">QPushButton{
+	background: transparent;
+	border: none;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
+
 </string>
        </property>
        <property name="text">
@@ -429,8 +529,23 @@ border:none;
      <item>
       <widget class="QPushButton" name="Paste_Button">
        <property name="styleSheet">
-        <string notr="true">background: transparent;
-border:none;
+        <string notr="true">QPushButton{
+	background: transparent;
+	border: none;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
+
 </string>
        </property>
        <property name="text">
@@ -454,8 +569,23 @@ border:none;
      <item>
       <widget class="QPushButton" name="Undo_Button">
        <property name="styleSheet">
-        <string notr="true">background: transparent;
-border:none;
+        <string notr="true">QPushButton{
+	background: transparent;
+	border: none;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
+
 </string>
        </property>
        <property name="text">
@@ -479,8 +609,23 @@ border:none;
      <item>
       <widget class="QPushButton" name="Redo_Button">
        <property name="styleSheet">
-        <string notr="true">background: transparent;
-border:none;
+        <string notr="true">QPushButton{
+	background: transparent;
+	border: none;
+}
+
+QPushButton:hover{
+	background: #c1c1c1;
+}
+
+QPushButton:pressed{
+	background: #868686;
+}
+
+QPushButton:disabled{
+	background: transparent;
+}
+
 </string>
        </property>
        <property name="text">
@@ -522,8 +667,8 @@ border:none;</string>
      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'.AppleSystemUIFont'; font-size:13pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <zorder>Code_Area</zorder>

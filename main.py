@@ -9,12 +9,6 @@ import os
 
 from Load_UI import MainUI 
 
-
-# class MainUI(QMainWindow):
-#     def __init__(self):
-#         super(MainUI, self).__init__()
-#         loadUi("124-Brainrot-Language.ui", self)
-
 class WelcomeDialog(QMainWindow):
     def __init__(self, main_ui):
         super(WelcomeDialog, self).__init__()

@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox
-from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox, QVBoxLayout, QWidget
 from PyQt5.QtGui import QKeySequence
 from PyQt5.uic import loadUi
 from tkinter import *
@@ -11,17 +10,19 @@ class MainUI(QMainWindow):
         super(MainUI, self).__init__()
         loadUi('124-Brainrot-Language.ui', self)
         
-        
+        # disable certain buttons at start
+        self.Enable_Buttons = True
+        self.ToggleButtons()
+
         self.Code = "Empty"
         self.Current_File: str = ""
 
         # check text changes
-        self.Modified = False
         self.Code_Area.textChanged.connect(self.Text_Change)
         
         # check if file saved
-        self.Unsaved_Label = " (Unsaved changes)"
         self.Is_Saved = True
+        self.Unsaved_Label = " (Unsaved changes)"
 
         # editor states
         self.Code_Area.setReadOnly(True)
@@ -44,6 +45,9 @@ class MainUI(QMainWindow):
 
         self.Open_File_Button.clicked.connect(self.Open_File)
         self.Open_File_Button.setToolTip("Open New File")
+
+        self.Close_File_Button.clicked.connect(self.Close_File)
+        self.Close_File_Button.setToolTip("Close File")
 
         self.Compile_Button.clicked.connect(self.Compile)
         self.Compile_Button.setToolTip("Compile Program")
@@ -78,6 +82,7 @@ class MainUI(QMainWindow):
         Open_File_Shortcut = QShortcut(QKeySequence("Ctrl+O"), self)
         Save_Shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
         Save_As_Shortcut = QShortcut(QKeySequence("Ctrl+Shift+S"), self)
+        Close_File_ShortCut = QShortcut(QKeySequence("Ctrl+K"), self)
 
         Undo = QShortcut(QKeySequence("Ctrl+Q"), self)
         Redo = QShortcut(QKeySequence("Ctrl+W"), self)
@@ -89,12 +94,27 @@ class MainUI(QMainWindow):
         Open_File_Shortcut.activated.connect(self.Open_File)
         Save_Shortcut.activated.connect(self.Save)
         Save_As_Shortcut.activated.connect(self.Save_As)
+        Close_File_ShortCut.activated.connect(self.Close_File)
 
         Undo.activated.connect(self.Undo)
         Redo.activated.connect(self.Redo)
         Copy.activated.connect(self.Copy)
         Cut.activated.connect(self.Cut)
         Paste.activated.connect(self.Paste)
+
+    def ToggleButtons(self):
+        self.Enable_Buttons = not self.Enable_Buttons
+        
+        self.Compile_Button.setEnabled(self.Enable_Buttons)
+        self.Execute_Button.setEnabled(self.Enable_Buttons)
+        self.Close_File_Button.setEnabled(self.Enable_Buttons)
+        self.Save_Button.setEnabled(self.Enable_Buttons)
+        self.Save_As_Button.setEnabled(self.Enable_Buttons)
+        self.Undo_Button.setEnabled(self.Enable_Buttons)
+        self.Redo_Button.setEnabled(self.Enable_Buttons)
+        self.Copy_Button.setEnabled(self.Enable_Buttons)
+        self.Cut_Button.setEnabled(self.Enable_Buttons)
+        self.Paste_Button.setEnabled(self.Enable_Buttons)
 
     def SetActiveEditor(self, fileName: str = "Untitled"):
         self.Code_Area.setReadOnly(False)
@@ -105,7 +125,6 @@ class MainUI(QMainWindow):
     def Text_Change(self):
         if self.Code_Area.isReadOnly():
             return
-        self.Modified = True
 
         if self.Is_Saved:
             prompt: str = self.CurrentFileName.text() + self.Unsaved_Label
@@ -115,30 +134,41 @@ class MainUI(QMainWindow):
     def New_File(self):
         if not self.Prompt_Save_Changes():
             return
-        if not self.Prompt_Save_Changes():
-            return
         print("Will open a new file in the Dialog Box")
         self.Current_File = ""
         self.SetActiveEditor()
-        self.Current_File = ""
-        self.SetActiveEditor()
+        if not self.Enable_Buttons:
+            self.ToggleButtons()
 
     def Open_File(self):
-        if not self.Prompt_Save_Changes():
-            return
         if not self.Prompt_Save_Changes():
             return
         file = filedialog.askopenfile()
         if(file):
             self.Current_File = file.name
-            self.SetActiveEditor(file.name.split('/')[-1])
-            self.SetActiveEditor(file.name.split('/')[-1])
+            self.SetActiveEditor()
             Txt = ""
             for line in file:
                 Txt = Txt + line
                 
             print(Txt)   
             self.Code_Area.setPlainText(Txt)
+            self.CurrentFileName.setText(file.name.split('/')[-1])
+            self.Is_Saved = True
+            
+            if not self.Enable_Buttons:
+                self.ToggleButtons()
+
+    def Close_File(self):
+        if not self.Prompt_Save_Changes():
+            return
+        self.Code_Area.setReadOnly(True)
+        self.CurrentFileName.setReadOnly(True)
+        self.Current_File = ""
+        self.Code_Area.setText("Create or open a file to get started")
+        self.CurrentFileName.setText("Welcome")
+        self.ToggleButtons()
+        self.Is_Saved = True
 
     def Compile(self):
         self.Code =  self.Code_Area.toPlainText()
@@ -198,22 +228,6 @@ class MainUI(QMainWindow):
         print("Glue")
         self.Code_Area.paste()
 
-    def Prompt_Save_Changes(self):
-        if self.Modified:
-            reply = QMessageBox.question(
-                self, "Unsaved Changes",
-                "You have unsaved changes. Would you like to save them?",
-                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
-            )
-            if reply == QMessageBox.Yes:
-                self.save_file()
-                return True  # Proceed with the action
-            elif reply == QMessageBox.No:
-                return True  # Proceed without saving
-            else:
-                return False  # Cancel the action
-        return True  # No unsaved changes, proceed
-
     def closeEvent(self, event):
         # Prompt to save changes when closing the application.
         if self.Prompt_Save_Changes():
@@ -229,7 +243,7 @@ class MainUI(QMainWindow):
                 QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
             )
             if reply == QMessageBox.Yes:
-                self.save_file()
+                self.Save()
                 return True  # Proceed with the action
             elif reply == QMessageBox.No:
                 return True  # Proceed without saving
