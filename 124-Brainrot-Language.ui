@@ -16,6 +16,18 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -80,7 +92,7 @@ text-align: center;</string>
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>430</y>
+      <y>440</y>
       <width>731</width>
       <height>161</height>
      </rect>
@@ -117,6 +129,9 @@ text-align: center;</string>
     <layout class="QHBoxLayout" name="UpperRightPanel">
      <item>
       <widget class="QPushButton" name="Compile_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">background: transparent;
 border:none;
@@ -128,18 +143,22 @@ border:none;
        <property name="icon">
         <iconset>
          <normalon>button-images/Compile_image.png</normalon>
+         <disabledoff>button-images/gray_Compile_image.png</disabledoff>
         </iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="Execute_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">background: transparent;
 border:none;
@@ -152,12 +171,14 @@ border:none;
        <property name="icon">
         <iconset>
          <normalon>button-images/Execute_image.png</normalon>
+         <disabledoff>button-images/gray_Execute_image.png</disabledoff>
+         <disabledon>button-images/gray_Execute_image.png</disabledon>
         </iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
       </widget>
@@ -170,7 +191,7 @@ border:none;
       <x>0</x>
       <y>0</y>
       <width>71</width>
-      <height>591</height>
+      <height>601</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -222,6 +243,9 @@ text-align: center;</string>
         </property>
         <item>
          <widget class="QPushButton" name="New_File_Button">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
 	background: transparent;
@@ -261,6 +285,9 @@ QPushButton:disabled{
         </item>
         <item>
          <widget class="QPushButton" name="Open_File_Button">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
 	background: transparent;
@@ -300,6 +327,9 @@ QPushButton:disabled{
         </item>
         <item>
          <widget class="QPushButton" name="Save_Button">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
 	background: transparent;
@@ -339,6 +369,9 @@ QPushButton:disabled{
         </item>
         <item>
          <widget class="QPushButton" name="Save_As_Button">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
 	background: transparent;
@@ -378,6 +411,9 @@ QPushButton:disabled{
         </item>
         <item>
          <widget class="QPushButton" name="Close_File_Button">
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="styleSheet">
            <string notr="true">QPushButton{
 	background: transparent;
@@ -423,6 +459,9 @@ QPushButton:disabled{
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
        </property>
+       <property name="bottomMargin">
+        <number>300</number>
+       </property>
       </layout>
      </item>
     </layout>
@@ -431,7 +470,7 @@ QPushButton:disabled{
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>380</y>
+      <y>390</y>
       <width>231</width>
       <height>51</height>
      </rect>
@@ -448,6 +487,9 @@ QPushButton:disabled{
     <layout class="QHBoxLayout" name="EditSection">
      <item>
       <widget class="QPushButton" name="Cut_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 	background: transparent;
@@ -488,6 +530,9 @@ QPushButton:disabled{
      </item>
      <item>
       <widget class="QPushButton" name="Copy_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 	background: transparent;
@@ -528,6 +573,9 @@ QPushButton:disabled{
      </item>
      <item>
       <widget class="QPushButton" name="Paste_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 	background: transparent;
@@ -568,6 +616,9 @@ QPushButton:disabled{
      </item>
      <item>
       <widget class="QPushButton" name="Undo_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 	background: transparent;
@@ -608,6 +659,9 @@ QPushButton:disabled{
      </item>
      <item>
       <widget class="QPushButton" name="Redo_Button">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton{
 	background: transparent;
@@ -657,6 +711,9 @@ QPushButton:disabled{
       <height>381</height>
      </rect>
     </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>ArrowCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">color: #fef9e0;         
 padding: 10px;     
@@ -671,11 +728,22 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'.AppleSystemUIFont'; font-size:13pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QWidget" name="editor" native="true">
+    <property name="geometry">
+     <rect>
+      <x>79</x>
+      <y>49</y>
+      <width>711</width>
+      <height>381</height>
+     </rect>
+    </property>
+   </widget>
    <zorder>Code_Area</zorder>
    <zorder>FileNameWidget</zorder>
    <zorder>horizontalWidget_3</zorder>
    <zorder>horizontalGroupBox_2</zorder>
    <zorder>SidePanel_2</zorder>
+   <zorder>editor</zorder>
    <zorder>EditSection_2</zorder>
   </widget>
  </widget>

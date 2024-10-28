@@ -5,10 +5,22 @@ from tkinter import *
 from tkinter import filedialog
 import sys
 
+from Line_Numbered_Editor import LineNumberedTextEdit
 class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi('124-Brainrot-Language.ui', self)
+
+        # Create custom line-numbered editor
+        self.Code_Area = LineNumberedTextEdit()
+
+        # Set up layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.Code_Area)
+
+        # Container of layout
+        container: QWidget = self.findChild(QWidget, "editor")
+        container.setLayout(layout)
         
         # disable certain buttons at start
         self.Enable_Buttons = True
@@ -29,14 +41,14 @@ class MainUI(QMainWindow):
         self.CurrentFileName.setReadOnly(True)
 
         # placeholders
-        self.Code_Area.setText("Create or open a file to get started")
+        self.Code_Area.setPlainText("Create or open a file to get started")
         self.CurrentFileName.setText("Welcome")
 
         # button clicks and tool tips
         self.CurrentFileName.setReadOnly(True)
 
         # placeholders
-        self.Code_Area.setText("Create or open a file to get started")
+        self.Code_Area.setPlainText("Create or open a file to get started")
         self.CurrentFileName.setText("Welcome")
 
         # button clicks and tool tips
@@ -118,8 +130,7 @@ class MainUI(QMainWindow):
 
     def SetActiveEditor(self, fileName: str = "Untitled"):
         self.Code_Area.setReadOnly(False)
-        self.Code_Area.setText("")
-        self.CurrentFileName.setReadOnly(False)
+        self.Code_Area.setPlainText("")
         self.CurrentFileName.setText(fileName + self.Unsaved_Label)
 
     def Text_Change(self):
@@ -165,7 +176,7 @@ class MainUI(QMainWindow):
         self.Code_Area.setReadOnly(True)
         self.CurrentFileName.setReadOnly(True)
         self.Current_File = ""
-        self.Code_Area.setText("Create or open a file to get started")
+        self.Code_Area.setPlainText("Create or open a file to get started")
         self.CurrentFileName.setText("Welcome")
         self.ToggleButtons()
         self.Is_Saved = True
@@ -238,7 +249,7 @@ class MainUI(QMainWindow):
     def Prompt_Save_Changes(self):
         if not self.Is_Saved:
             reply = QMessageBox.question(
-                self, "Unsaved Changes",
+                None, "Unsaved Changes",
                 "You have unsaved changes. Would you like to save them?",
                 QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
             )
@@ -258,12 +269,12 @@ class MainUI(QMainWindow):
         else:
             event.ignore()  # Cancel the close
 
-def main():
-    app = QApplication (sys.argv)
-    ui = MainUI()
-    ui.show()
-    app.exec_()
+# def main():
+#     app = QApplication (sys.argv)
+#     ui = MainUI()
+#     ui.show()
+#     app.exec_()
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
