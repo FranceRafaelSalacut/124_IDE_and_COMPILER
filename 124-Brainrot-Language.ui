@@ -702,7 +702,7 @@ QPushButton:disabled{
      </item>
     </layout>
    </widget>
-   <widget class="QTextEdit" name="Code_Area">
+   <widget class="QTextEdit" name="Code_Area1">
     <property name="geometry">
      <rect>
       <x>70</x>
@@ -737,8 +737,11 @@ p, li { white-space: pre-wrap; }
       <height>381</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">background:transparent;</string>
+    </property>
    </widget>
-   <zorder>Code_Area</zorder>
+   <zorder>Code_Area1</zorder>
    <zorder>FileNameWidget</zorder>
    <zorder>horizontalWidget_3</zorder>
    <zorder>horizontalGroupBox_2</zorder>

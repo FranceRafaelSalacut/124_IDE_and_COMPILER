@@ -14,7 +14,6 @@ class LineNumberArea(QWidget):
     def paintEvent(self, event):
         self.editor.line_number_area_paint_event(event)
 
-
 class LineNumberedTextEdit(QPlainTextEdit):
     def __init__(self):
         super().__init__()
@@ -44,7 +43,7 @@ class LineNumberedTextEdit(QPlainTextEdit):
         return space
 
     def update_line_number_area_width(self, _):
-        self.setViewportMargins(self.line_number_area_width(), 0, 0, 0)
+        self.setViewportMargins(self.line_number_area_width(), 0, 5, 0)
 
     def update_line_number_area(self, rect, dy):
         if dy:

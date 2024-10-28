@@ -10,17 +10,6 @@ class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
         loadUi('124-Brainrot-Language.ui', self)
-
-        # Create custom line-numbered editor
-        self.Code_Area = LineNumberedTextEdit()
-
-        # Set up layout
-        layout = QVBoxLayout()
-        layout.addWidget(self.Code_Area)
-
-        # Container of layout
-        container: QWidget = self.findChild(QWidget, "editor")
-        container.setLayout(layout)
         
         # disable certain buttons at start
         self.Enable_Buttons = True
@@ -28,6 +17,9 @@ class MainUI(QMainWindow):
 
         self.Code = "Empty"
         self.Current_File: str = ""
+
+        # Code Area
+        self.Code_Area = LineNumberedTextEdit()
 
         # check text changes
         self.Code_Area.textChanged.connect(self.Text_Change)
@@ -38,10 +30,11 @@ class MainUI(QMainWindow):
 
         # editor states
         self.Code_Area.setReadOnly(True)
+        self.Code_Area1.setReadOnly(True)
         self.CurrentFileName.setReadOnly(True)
 
         # placeholders
-        self.Code_Area.setPlainText("Create or open a file to get started")
+        self.Code_Area1.setPlainText("Create or open a file to get started")
         self.CurrentFileName.setText("Welcome")
 
         # button clicks and tool tips
@@ -113,6 +106,18 @@ class MainUI(QMainWindow):
         Copy.activated.connect(self.Copy)
         Cut.activated.connect(self.Cut)
         Paste.activated.connect(self.Paste)
+    
+    def Init_Code_Area(self):
+        # Set up layout
+        self.Code_Area = LineNumberedTextEdit()
+        self.Code_Area.textChanged.connect(self.Text_Change)
+        layout = QVBoxLayout()
+        layout.addWidget(self.Code_Area)
+
+        # Container of layout
+        container: QWidget = self.findChild(QWidget, "editor")
+        container.setLayout(layout)
+        container.setStyleSheet("QWidget{background: #291720}")
 
     def ToggleButtons(self):
         self.Enable_Buttons = not self.Enable_Buttons
@@ -129,6 +134,7 @@ class MainUI(QMainWindow):
         self.Paste_Button.setEnabled(self.Enable_Buttons)
 
     def SetActiveEditor(self, fileName: str = "Untitled"):
+        self.Init_Code_Area()
         self.Code_Area.setReadOnly(False)
         self.Code_Area.setPlainText("")
         self.CurrentFileName.setText(fileName + self.Unsaved_Label)
@@ -136,7 +142,7 @@ class MainUI(QMainWindow):
     def Text_Change(self):
         if self.Code_Area.isReadOnly():
             return
-
+        
         if self.Is_Saved:
             prompt: str = self.CurrentFileName.text() + self.Unsaved_Label
             self.CurrentFileName.setText(prompt)
@@ -157,7 +163,10 @@ class MainUI(QMainWindow):
         file = filedialog.askopenfile()
         if(file):
             self.Current_File = file.name
-            self.SetActiveEditor()
+
+            if self.Code_Area.isReadOnly():
+                self.SetActiveEditor()
+            
             Txt = ""
             for line in file:
                 Txt = Txt + line
@@ -173,6 +182,7 @@ class MainUI(QMainWindow):
     def Close_File(self):
         if not self.Prompt_Save_Changes():
             return
+
         self.Code_Area.setReadOnly(True)
         self.CurrentFileName.setReadOnly(True)
         self.Current_File = ""
@@ -180,6 +190,23 @@ class MainUI(QMainWindow):
         self.CurrentFileName.setText("Welcome")
         self.ToggleButtons()
         self.Is_Saved = True
+        self.remove_layout()
+
+    def remove_layout(self):
+        # Check if there is a layout
+        container: QWidget = self.findChild(QWidget, "editor")
+        layout = container.layout()
+        if layout:
+            # Iterate and remove widgets from the layout
+            layout.removeWidget(self.Code_Area)
+            self.Code_Area.setParent(None)
+            # self.Code_Area.deleteLater()
+            # self.Code_Area = None
+
+            # Delete the layout itself
+            layout.deleteLater()
+            # container.setLayout(None)  # Clear the layout from the main widget
+        container.setStyleSheet("QWidget{background: transparent;}")
 
     def Compile(self):
         self.Code =  self.Code_Area.toPlainText()
@@ -248,11 +275,20 @@ class MainUI(QMainWindow):
 
     def Prompt_Save_Changes(self):
         if not self.Is_Saved:
-            reply = QMessageBox.question(
-                None, "Unsaved Changes",
+            msgBox = QMessageBox(
+                QMessageBox.Question,
+                "Unsaved Changes",
                 "You have unsaved changes. Would you like to save them?",
-                QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel
+                buttons=QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel,
+                parent=self,
             )
+            msgBox.setDefaultButton(QMessageBox.No)
+            msgBox.button(QMessageBox.Yes).setStyleSheet("color: white")
+            msgBox.button(QMessageBox.No).setStyleSheet("color: white")
+            msgBox.button(QMessageBox.Cancel).setStyleSheet("color: white")
+            msgBox.setStyleSheet("color: white")
+            msgBox.exec_()
+            reply = msgBox.standardButton(msgBox.clickedButton())
             if reply == QMessageBox.Yes:
                 self.Save()
                 return True  # Proceed with the action
