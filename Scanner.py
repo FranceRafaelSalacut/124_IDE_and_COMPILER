@@ -1,8 +1,8 @@
 from Terminals import Terminal as T
 
 D_TYPE = ['int']
-K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax']
-PUNCTUATOR = ['(', ')', ";", '"']
+K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma']
+PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/"]
 
 table = [
@@ -31,6 +31,7 @@ def manual_tokenize_(str):
             token = token + char
 
     tokens = [tok for tok in tokens if tok != " "]
+    print(tokens)
     return tokens
 
 def classify(token):
@@ -83,18 +84,24 @@ def Scanner(line):
     Token = manual_tokenize_(line)
     Tokenized = []
     state = 0
-    expect_literal = False
+    literal = 0
     expect_identifier = False
 
     for tok in Token:
         state = table[state][classify(tok)]
 
+        if classify2(tok) == "Literal":
+            literal+=1
+        else:
+            literal=0
+
         if expect_identifier:
             Tokenized.append(Tokenize([tok]))
             expect_identifier = False
-        
-        if not expect_literal:
-            Tokenized.append(Tokenize(tok))
+        else:
+            if literal <= 1:
+                Tokenized.append(Tokenize(tok))
+            
 
         if state == 1 or state == 3 or state == 5 or state == 6:
             state = 0
