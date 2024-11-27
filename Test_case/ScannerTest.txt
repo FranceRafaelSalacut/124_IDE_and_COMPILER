@@ -1,0 +1,6 @@
+rizz "Hello World" ;
+skibidi int num ;
+galvanized int num ;
+fanumTax(5 + 5);
+rizz "Enter a string ";
+galvanized int num = fanumTax(1+1);
