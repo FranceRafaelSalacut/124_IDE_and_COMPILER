@@ -1,41 +1,45 @@
 from Terminals import Terminal as T
+import re
+import os
 
 D_TYPE = ['int']
 K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma']
 PUNCTUATOR = ['(', ')', ";", '"', ':']
-OPERATOR = ['=', '-', "+", "*", "/"]
+OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
 
 table = [
-[1,	2,	6,	4,	6,	1,	1,	1,	6,],
-[0,	0,	0,	0,	0,	0,	0,	0,	0,],
-[6,	3,	2,	6,	6,	6,	6,	6,	6,],
-[0,	0,	0,	0,	0,	0,	0,	0,	0,],
-[6,	6,	6,	6,	5,	6,	6,	6,	6,],
-[0,	0,	0,	0,	0,	0,	0,	0,	0,],
-[0,	0,	0,	0,	0,	0,	0,	0,	0,],
+[1,	2,	6,	4,	6,	1,	1,	1,	6, 4, 4],
+[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+[6,	3,	2,	6,	6,	6,	6,	6,	6, 6, 6],
+[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+[6,	6,	6,	6,	5,	6,	6,	6,	6, 6, 6],
+[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
 ]
-
 
 def manual_tokenize_(str):
     tokens = []
-    delimiter = [',', ';', ' ', "=", ".", "(", ")", '"', "+", "-", "*", "/"]
+    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<", ">", ":"]
 
-    token = ''
-    for char in str:
-        if char in delimiter:
-            if token != '':
-                tokens.append(token)
-            tokens.append(char)
-            token = ''
-        else:
-            token = token + char
+    pattern = f"({'|'.join(map(re.escape, delimiter))})"
+
+    # Split the string and include the delimiters
+    result = re.split(pattern, str)
+
+    # Remove empty strings from the result
+    tokens = list(filter(None, result))
 
     tokens = [tok for tok in tokens if tok != " "]
+    tokens = [tok for tok in tokens if tok != "\n"]
     print(tokens)
     return tokens
 
 def classify(token):
-    if token in K_WORD:
+    if token == "alpha":
+        return 9
+    elif token == "beta":
+        return 10
+    elif token in K_WORD:
         return 0
     elif token == '"':
         return 1
@@ -110,7 +114,6 @@ def Scanner(line):
             expect_identifier = True
 
     return Tokenized
-
 
 with open('Test_case/ScannerTest.txt', 'r') as file:
     for line in file:

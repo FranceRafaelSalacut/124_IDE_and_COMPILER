@@ -1,5 +1,5 @@
 
-PUNCTUATOR = ['(', ')', ";", '"']
+PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/"]
 
 def Terminal(token):
