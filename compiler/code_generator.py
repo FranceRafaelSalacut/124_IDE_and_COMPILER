@@ -62,6 +62,33 @@ class CodeGenerator:
                 asm.write(f'\tlea rdx, [{self.tokens[i][1]}]\n')
                 asm.write('\txor rax, rax\n')
                 asm.write('\tcall scanf\n')
+            elif self.tokens[i][1] == 'f':
+                constant1 = self.tokens[i+2][1]
+                op = self.tokens[i+3][1]
+                constant2 = self.tokens[i+4][1]
+                print(constant1, op, constant2)
+                i += 6
+                if op == '+':
+                    asm.write(f'\tmov rax, qword [{constant1}]\n')
+                    asm.write(f'\tadd rax, qword [{constant2}]\n')
+                    # mov qword [result], rax
+
+                elif op == '-':
+                    asm.write(f'\tmov rax, qword [{constant1}]\n')
+                    asm.write(f'\tsub rax, qword [{constant2}]\n')
+                    # mov qword [result], rax
+
+                elif op == '*':
+                    asm.write(f'\tmov rax, qword [{constant1}]\n')
+                    asm.write(f'\timul rax, qword [{constant2}]\n')
+                    # mov qword [result], rax
+
+                elif op == '/':
+                    asm.write(f'\tmov rax, qword [{constant1}]\n')
+                    asm.write(f'\tmov rbx, qword [{constant2}]\n')
+                    asm.write(f'\tcqo\n')
+                    asm.write(f'\tidiv rbx\n')             
+                    # mov qword [result], rax
             else:
                 i+=1
                 asm.write('\n')
