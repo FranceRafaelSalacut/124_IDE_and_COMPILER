@@ -1,0 +1,12 @@
+rizz "Hello World" ;
+skibidi int num ;
+galvanized int num ;
+fanumTax(5 + 5);
+rizz "Enter a string ";
+galvanized int num = fanumTax(1+1);
+alpha num == 1:
+    fanumTax(1+1);
+beta num == 2:
+    fanumTax(1*1);
+sigma:
+    rizz "yow";
