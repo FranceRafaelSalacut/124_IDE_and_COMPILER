@@ -4,7 +4,8 @@ OPERATOR = ['=', '-', "+", "*", "/"]
 
 def Terminal(token, symbols, literals):
     if type(token) == list:
-        return "var"
+        symbols[token[0]] = None
+        return token[0]
     elif token == "rizz":
         return "r"
     elif token == "skibidi":
@@ -13,15 +14,19 @@ def Terminal(token, symbols, literals):
         return "f"
     elif token == "galvanized":
         return "g"
+    elif token == 'int':
+        return "int"
     elif token in PUNCTUATOR or token in OPERATOR:
         return token
     elif token.isdigit():
-        id = len(symbols)
+        id = literals['d']
+        literals['d'] = literals['d'] + 1
         key = f'd{id}'
-        symbols[key] = token
+        literals[key] = token
         return key
     elif type(token) == str:
-        id = len(literals)
+        id = literals['w']
+        literals['w'] = literals['w'] + 1
         key = f'w{id}'
         literals[key] = token
         return key

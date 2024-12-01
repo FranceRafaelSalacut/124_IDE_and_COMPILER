@@ -1,4 +1,5 @@
 from Terminals import Terminal as T
+import compiler.code_generator as generator
 import re
 import os
 
@@ -107,7 +108,7 @@ def Scanner(line):
     literal = 0
     expect_identifier = False
     symbolTable = {}
-    literalTable = {}
+    literalTable = {'d': 0, 'w' : 0}
 
     for tok in Token:
         state = table[state][classify(tok)]
@@ -134,9 +135,15 @@ def Scanner(line):
     return Tokenized, symbolTable, literalTable
 
 with open('Test_case/ScannerTest.txt', 'r') as file:
+    generate = True
     for line in file:
         print(line, end="")
         tokens, symbols, literals = Scanner(line)
+        if generate:
+            asm = generator.CodeGenerator(tokens, symbols, literals, None)
+            asm.generateMachineCode()
+            generate = False
         print(tokens, end="\n\n")
-
+        print(symbols)
+        print(literals)
 

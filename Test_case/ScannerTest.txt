@@ -1,8 +1,8 @@
-rizz "Hello World << 25" ;
+skibidi int num; rizz "Hello World << 25 \x" ; rizz 25 ; rizz int num;
 skibidi int num ;
 galvanized int num ;
 fanumTax(5 + 5);
-rizz "Enter a string ";
+rizz abcd;
 galvanized int num = fanumTax(1+1);
 alpha num == 1:
     fanumTax(1+1);
