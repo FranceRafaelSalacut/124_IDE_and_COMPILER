@@ -1,4 +1,4 @@
-rizz "Hello World" ;
+rizz "Hello World << 25" ;
 skibidi int num ;
 galvanized int num ;
 fanumTax(5 + 5);

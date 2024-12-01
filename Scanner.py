@@ -29,9 +29,24 @@ def manual_tokenize_(str):
     # Remove empty strings from the result
     tokens = list(filter(None, result))
 
-    tokens = [tok for tok in tokens if tok != " "]
-    tokens = [tok for tok in tokens if tok != "\n"]
-    print(tokens)
+    temp = []
+    literalCheck = False
+    literal = ""
+
+    for tok in tokens:
+        if tok == '\"':
+            literalCheck = not literalCheck
+            if not literalCheck:
+                temp.append(literal)
+            temp.append('\"')
+        elif literalCheck:
+            literal += tok
+        elif tok != " " and tok != "\n":
+            temp.append(tok)
+        
+    tokens = temp
+
+    print("tokens", tokens)
     return tokens
 
 def classify(token):
@@ -76,8 +91,9 @@ def classify2(token):
     else:
         return "Unidentified"
 
-def Tokenize(token):
-    return (classify2(token), T(token))
+def Tokenize(token, symbolTable, literalTable):
+    terminal = T(token, symbolTable, literalTable)
+    return (classify2(token), terminal)
 
 def Test_Print(token):
     for tok in token:
@@ -90,6 +106,8 @@ def Scanner(line):
     state = 0
     literal = 0
     expect_identifier = False
+    symbolTable = {}
+    literalTable = {}
 
     for tok in Token:
         state = table[state][classify(tok)]
@@ -100,11 +118,11 @@ def Scanner(line):
             literal=0
 
         if expect_identifier:
-            Tokenized.append(Tokenize([tok]))
+            Tokenized.append(Tokenize([tok], symbolTable, literalTable))
             expect_identifier = False
         else:
             if literal <= 1:
-                Tokenized.append(Tokenize(tok))
+                Tokenized.append(Tokenize(tok, symbolTable, literalTable))
             
 
         if state == 1 or state == 3 or state == 5 or state == 6:
@@ -113,11 +131,12 @@ def Scanner(line):
         if state == 4:
             expect_identifier = True
 
-    return Tokenized
+    return Tokenized, symbolTable, literalTable
 
 with open('Test_case/ScannerTest.txt', 'r') as file:
     for line in file:
         print(line, end="")
-        print(Scanner(line), end="\n\n")
+        tokens, symbols, literals = Scanner(line)
+        print(tokens, end="\n\n")
 
 
