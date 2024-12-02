@@ -39,6 +39,7 @@ def manual_tokenize_(str):
             literalCheck = not literalCheck
             if not literalCheck:
                 temp.append(literal)
+                literal = ''
             temp.append('\"')
         elif literalCheck:
             literal += tok

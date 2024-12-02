@@ -210,6 +210,7 @@ class MainUI(QMainWindow):
 
     def Compile(self):
         self.Code =  self.Code_Area.toPlainText()
+        # Compiler(self.Code, Current_File)
         print(self.Code)
         print(self.Current_File)
 

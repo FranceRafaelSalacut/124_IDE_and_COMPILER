@@ -39,8 +39,9 @@ class CodeGenerator:
         asm.write("\tsub rsp, 32\n\n")
 
         i = 0
+        variableStore = ""
         while i < len(self.tokens):
-            if self.tokens[i][1] == 'r':        # rizz (print)
+            if self.tokens[i][1] == 'r':            # rizz (print)
                 i += 1
                 if self.tokens[i+1][0] == 'Literal':
                     i+=1
@@ -56,18 +57,23 @@ class CodeGenerator:
                     asm.write('\txor rax, rax\n')
                     asm.write('\tcall printf\n')
                     i += 1
-            elif self.tokens[i][1] == 'b':
+            elif self.tokens[i][1] == 'b':          # skibidi input
                 i += 2
                 asm.write('\tlea rcx, [scanfmt]\n')
                 asm.write(f'\tlea rdx, [{self.tokens[i][1]}]\n')
                 asm.write('\txor rax, rax\n')
                 asm.write('\tcall scanf\n')
-            elif self.tokens[i][1] == 'f':
-                constant1 = self.tokens[i+2][1]
-                op = self.tokens[i+3][1]
-                constant2 = self.tokens[i+4][1]
-                print(constant1, op, constant2)
-                i += 6
+            elif self.tokens[i][1] == 'f':          # fanumTax operation
+                if self.tokens[i+2][0] == 'Constant':
+                    constant1 = self.tokens[i+2][1]
+                    op = self.tokens[i+3][1]
+                    constant2 = self.tokens[i+4][1]
+                    i += 6  
+                else:
+                    constant1 = self.tokens[i+3][1]
+                    op = self.tokens[i+4][1]
+                    constant2 = self.tokens[i+6][1]
+                    i += 8  
                 if op == '+':
                     asm.write(f'\tmov rax, qword [{constant1}]\n')
                     asm.write(f'\tadd rax, qword [{constant2}]\n')
@@ -89,6 +95,30 @@ class CodeGenerator:
                     asm.write(f'\tcqo\n')
                     asm.write(f'\tidiv rbx\n')             
                     # mov qword [result], rax
+
+                if variableStore != "":
+                    asm.write(f'\tmov qword [{variableStore}], rax')
+                    variableStore = ""
+                asm.write('\n')
+            elif self.tokens[i][1] == 'g':              # galvanized declaration
+                variableStore = self.tokens[i+2][1]
+                i += 3
+                if self.tokens[i][1] == ';':
+                    variableStore = ""
+                    continue
+                elif self.tokens[i][1] == '=':
+                    i += 1
+
+                if self.tokens[i][1] == 'f':
+                    continue
+                elif self.tokens[i][0] == 'Constant':
+                    asm.write(f'\tmov qword [{variableStore}], {self.literalTable[self.tokens[i][1]]}\n\n')
+                    i += 2
+                    variableStore = ''
+                elif self.tokens[i][0] == 'Data Type':
+                    asm.write(f'\tmov rax, qword [{self.tokens[i+1][1]}]\n')
+                    asm.write(f'\tmov qword [{variableStore}], rax\n\n')
+                    i += 3
             else:
                 i+=1
                 asm.write('\n')
@@ -97,6 +127,5 @@ class CodeGenerator:
         asm.write('\tcall ExitProcess\n')
         asm.close()
     
-
 
 
