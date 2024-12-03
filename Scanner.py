@@ -31,7 +31,7 @@ def manual_tokenize_(str):
 
     tokens = [tok for tok in tokens if tok != " "]
     tokens = [tok for tok in tokens if tok != "\n"]
-    print(tokens)
+    #print(tokens)
     return tokens
 
 def classify(token):
@@ -115,9 +115,17 @@ def Scanner(line):
 
     return Tokenized
 
-with open('Test_case/ScannerTest.txt', 'r') as file:
-    for line in file:
-        print(line, end="")
-        print(Scanner(line), end="\n\n")
+
+def testing_attention_please():
+    return_this = []
+    with open('Test_case/ScannerTest.txt', 'r') as file:
+        for line in file:
+            #print(line, end="")
+            #print(Scanner(line), end="\n\n")
+            return_this.extend(Scanner(line))
+
+    
+    return return_this
+
 
 

@@ -10,3 +10,4 @@ beta num == 2:
     fanumTax(1*1);
 sigma:
     rizz "yow";
+goon;

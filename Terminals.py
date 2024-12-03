@@ -17,6 +17,8 @@ def Terminal(token):
         return token
     elif token.isdigit():
         return "d"
+    elif token == "int":
+        return token
     elif type(token) == str:
         return "w"
     else:
