@@ -1,3 +1,7 @@
+rizz "Enter a number1: \x";
+skibidi int operand1;
+rizz "Enter a number2: \x";
+skibidi int operand2;
 rizz "Menu";
 rizz "[1] Add two numbers";
 rizz "[2] Subtract two numbers";
@@ -5,10 +9,6 @@ rizz "[3] Multiply two numbers";
 rizz "[4] Divide two numbers";
 rizz "Enter a number: \x";
 skibidi int num;
-rizz "Enter a number1: \x";
-skibidi int operand1;
-rizz "Enter a number2: \x";
-skibidi int operand2;
 galvanized int correct = 1;
 alpha num == 1:
     rizz "Add Two numbers";

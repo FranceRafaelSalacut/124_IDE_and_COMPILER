@@ -142,13 +142,14 @@ with open('Test_case/CodeTest.txt', 'r') as file:
             
         tokens, symbols, literals = Scanner(content)
         asm = generator.CodeGenerator(tokens, symbols, literals, None)
-        asm.generateMachineCode()
+        asm.compile()
+        asm.run()
 
-        print(tokens, "\n")
-        for token in tokens:
-            print(token)
-        print(symbols, "\n")
-        print(literals, "\n")
+        # print(tokens, "\n")
+        # for token in tokens:
+        #     print(token)
+        # print(symbols, "\n")
+        # print(literals, "\n")
 
 
 with open('Test_case/ScannerTest.txt', 'r') as file:

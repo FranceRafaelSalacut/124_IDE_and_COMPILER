@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 class CodeGenerator:
     def __init__(self, tokens, symbols, literals, filepath):
@@ -170,3 +171,15 @@ class CodeGenerator:
         asm.write('\tcall ExitProcess\n')
         asm.close()
     
+    def compile(self):
+        print("[CMD] Assembling")
+        self.generateMachineCode()
+        os.system(f"nasm -f elf64 compiler/test.asm")
+        os.remove("compiler/test.asm")
+        print("[CMD] Linking")
+        os.system(f"gcc -o compiler/test.exe compiler/test.o")
+        os.remove("compiler/test.o")
+    
+    def run(self):
+        print("[CMD] Running")
+        subprocess.run("compiler/test.exe")
