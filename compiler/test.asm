@@ -1,11 +1,11 @@
 bits 64
 default rel
 section .bss
-	operand1 dq 1
-	operand2 dq 1
-	num dq 1
-	correct dq 1
-	result dq 1
+	operand1 resq 1
+	operand2 resq 1
+	num resq 1
+	correct resq 1
+	result resq 1
 section .data
 	fmt db "%d", 10, 0
 	intfmt db "%d", 0

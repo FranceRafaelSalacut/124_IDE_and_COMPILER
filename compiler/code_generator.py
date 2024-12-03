@@ -18,9 +18,8 @@ class CodeGenerator:
         asm.write('bits 64\n')
         asm.write("default rel\n")
         asm.write('section .bss\n')
-    
         for key, value in self.symbolTable.items():
-            asm.write(f'\t{key} {"dq" if value == "int" else "db"} 1\n' )
+            asm.write(f'\t{key} {"resq" if value == "int" else "resb"} 1\n' )
         asm.write('section .data\n')
         asm.write('\tfmt db \"%d\", 10, 0\n')
         asm.write('\tintfmt db \"%d\", 0\n')
@@ -181,7 +180,7 @@ class CodeGenerator:
         print("[CMD] Assembling")
         self.generateMachineCode()
         os.system(f"nasm -f elf64 compiler/test.asm")
-        # os.remove("compiler/test.asm")
+        os.remove("compiler/test.asm")
         print("[CMD] Linking")
         os.system(f"gcc -o compiler/test.exe compiler/test.o")
         os.remove("compiler/test.o")

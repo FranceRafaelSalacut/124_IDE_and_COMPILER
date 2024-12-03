@@ -3,7 +3,6 @@ PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/", "=="]
 
 def Terminal(token, symbols, literals):
-    print(token)
     if type(token) == list:
         symbols[token[0]] = symbols["var"]
         return token[0]
