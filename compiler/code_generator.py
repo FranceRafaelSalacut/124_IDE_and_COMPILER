@@ -10,6 +10,8 @@ class CodeGenerator:
         del self.literalTable['d']
 
     def generateMachineCode(self):
+        conditional = ""
+        nthConditional = -1
         asm = open('compiler/test.asm', 'w')
         asm.write('bits 64\n')
         asm.write("default rel\n")
@@ -100,6 +102,7 @@ class CodeGenerator:
                     asm.write(f'\tmov qword [{variableStore}], rax')
                     variableStore = ""
                 asm.write('\n')
+
             elif self.tokens[i][1] == 'g':              # galvanized declaration
                 variableStore = self.tokens[i+2][1]
                 i += 3
@@ -119,6 +122,46 @@ class CodeGenerator:
                     asm.write(f'\tmov rax, qword [{self.tokens[i+1][1]}]\n')
                     asm.write(f'\tmov qword [{variableStore}], rax\n\n')
                     i += 3
+
+            elif self.tokens[i][1] == "h":      # alpha (if)
+                nthConditional += 1
+                nthBeta = -1
+                conditional = "alpha"
+                asm.write(f'\tmov rax, qword [{self.tokens[i+1][1]}]\n')
+                asm.write(f'\tcmp rax, {self.literalTable[self.tokens[i+3][1]]}\n')
+                asm.write(f'\tjne endalpha{nthConditional}\n\n')
+                i += 5
+            elif self.tokens[i][1] == "e":      # beta (else if)
+                asm.write(f'\n\tjmp goon{nthConditional}\n\n')
+                if conditional == "alpha":
+                    asm.write(f'endalpha{nthConditional}:\n')
+                else:
+                    asm.write(f'endbeta{nthBeta}{nthConditional}:\n')
+                nthBeta += 1
+                conditional = "beta"
+                asm.write(f'\tmov rax, qword [{self.tokens[i+1][1]}]\n')
+                asm.write(f'\tcmp rax, {self.literalTable[self.tokens[i+3][1]]}\n')
+                asm.write(f'\tjne endbeta{nthBeta}{nthConditional}\n\n')
+                i += 5
+            
+            elif self.tokens[i][1] == 'm':      # sigma (else)
+                asm.write(f'\n\tjmp goon{nthConditional}\n\n')
+                if conditional == "alpha":
+                    asm.write(f'endalpha{nthConditional}:\n')
+                else:
+                    asm.write(f'endbeta{nthBeta}{nthConditional}:\n')
+                conditional = ""
+                i += 2
+
+            elif self.tokens[i][1] == 'n':       # goon (end if)
+                if conditional == "alpha":
+                    asm.write(f'\n\tjmp goon{nthConditional}\n\n')
+                    asm.write(f'endalpha{nthConditional}:\n')
+                elif conditional == 'beta':
+                    asm.write(f'\n\tjmp goon{nthConditional}\n\n')
+                    asm.write(f'endbeta{nthBeta}{nthConditional}:\n')
+                asm.write(f'goon{nthConditional}:\n\n')
+                i += 2
             else:
                 i+=1
                 asm.write('\n')
@@ -127,5 +170,3 @@ class CodeGenerator:
         asm.write('\tcall ExitProcess\n')
         asm.close()
     
-
-
