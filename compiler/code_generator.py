@@ -9,6 +9,7 @@ class CodeGenerator:
         self.filepath = filepath
         del self.literalTable['w']
         del self.literalTable['d']
+        del self.symbolTable['var']
 
     def generateMachineCode(self):
         conditional = ""
@@ -16,11 +17,15 @@ class CodeGenerator:
         asm = open('compiler/test.asm', 'w')
         asm.write('bits 64\n')
         asm.write("default rel\n")
+        asm.write('section .bss\n')
+    
+        for key, value in self.symbolTable.items():
+            asm.write(f'\t{key} {"dq" if value == "int" else "db"} 1\n' )
         asm.write('section .data\n')
         asm.write('\tfmt db \"%d\", 10, 0\n')
-        asm.write('\tscanfmt db \"%d\", 0\n')
-        for key in self.symbolTable.keys():
-            asm.write(f'\t{key} dq 0\n' )
+        asm.write('\tintfmt db \"%d\", 0\n')
+        asm.write('\tcharfmt db \"%c\", 0\n')
+        asm.write('\tstrfmt db \"%s\", 0\n')
         for key, value in self.literalTable.items():
             if key.startswith('w'):
                 if '\\x' in value:
@@ -62,7 +67,8 @@ class CodeGenerator:
                     i += 1
             elif self.tokens[i][1] == 'b':          # skibidi input
                 i += 2
-                asm.write('\tlea rcx, [scanfmt]\n')
+                fmt = self.tokens[i-1][1] + 'fmt'
+                asm.write(f'\tlea rcx, {fmt}\n')
                 asm.write(f'\tlea rdx, [{self.tokens[i][1]}]\n')
                 asm.write('\txor rax, rax\n')
                 asm.write('\tcall scanf\n')
@@ -175,7 +181,7 @@ class CodeGenerator:
         print("[CMD] Assembling")
         self.generateMachineCode()
         os.system(f"nasm -f elf64 compiler/test.asm")
-        os.remove("compiler/test.asm")
+        # os.remove("compiler/test.asm")
         print("[CMD] Linking")
         os.system(f"gcc -o compiler/test.exe compiler/test.o")
         os.remove("compiler/test.o")

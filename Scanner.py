@@ -3,7 +3,7 @@ import compiler.code_generator as generator
 import re
 import os
 
-D_TYPE = ['int']
+D_TYPE = ['int', 'char', 'string']
 K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon']
 PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
@@ -108,7 +108,7 @@ def Scanner(line):
     state = 0
     literal = 0
     expect_identifier = False
-    symbolTable = {}
+    symbolTable = {"var": "None"}
     literalTable = {'d': 0, 'w' : 0}
 
     for tok in Token:
