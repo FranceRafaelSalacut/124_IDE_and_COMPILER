@@ -135,34 +135,36 @@ def Scanner(line):
 
     return Tokenized, symbolTable, literalTable
 
-with open('Test_case/CodeTest.txt', 'r') as file:
-        content = ""
-        for line in file:
-            content += line.strip('\n')    
-            
-        tokens, symbols, literals = Scanner(content)
-        asm = generator.CodeGenerator(tokens, symbols, literals, None)
-        asm.compile()
-        asm.run()
 
-        # print(tokens, "\n")
-        # for token in tokens:
-        #     print(token)
-        # print(symbols, "\n")
-        # print(literals, "\n")
+if __name__ == "__main__":
+    with open('Test_case/CodeTest.txt', 'r') as file:
+            content = ""
+            for line in file:
+                content += line.strip('\n')    
+                
+            tokens, symbols, literals = Scanner(content)
+            asm = generator.CodeGenerator(tokens, symbols, literals, None)
+            asm.compile()
+            asm.run()
+
+            # print(tokens, "\n")
+            # for token in tokens:
+            #     print(token)
+            # print(symbols, "\n")
+            # print(literals, "\n")
 
 
-with open('Test_case/ScannerTest.txt', 'r') as file:
-    generate = True
+# with open('Test_case/ScannerTest.txt', 'r') as file:
+#     generate = True
 
-    # for line in file:
-    #     print(line, end="")
-    #     tokens, symbols, literals = Scanner(line)
-    #     if generate:
-    #         asm = generator.CodeGenerator(tokens, symbols, literals, None)
-    #         asm.generateMachineCode()
-    #         generate = False
-    #     print(tokens, end="\n\n")
-    #     print(symbols)
-    #     print(literals)
+#     for line in file:
+#         print(line, end="")
+#         tokens, symbols, literals = Scanner(line)
+#         if generate:
+#             asm = generator.CodeGenerator(tokens, symbols, literals, None)
+#             asm.generateMachineCode()
+#             generate = False
+#         print(tokens, end="\n\n")
+#         print(symbols)
+#         print(literals)
 
