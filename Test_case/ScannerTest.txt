@@ -12,3 +12,48 @@ beta num == 2:
     fanumTax(1*1);
 sigma:
     rizz "yow";
+
+
+
+
+rizz "Enter a number1: \x";
+skibidi int operand1;
+rizz "Enter a number2: \x";
+skibidi int operand2;
+rizz "Menu";
+rizz "[1] Add two numbers";
+rizz "[2] Subtract two numbers";
+rizz "[3] Multiply two numbers";
+rizz "[4] Divide two numbers";
+rizz "Enter a number: \x";
+skibidi int num;
+galvanized int correct = 1;
+alpha num == 1:
+    rizz "Add Two numbers";
+    rizz "The sum is: \x";
+    galvanized int result = fanumTax(int operand1 + int operand2);
+beta num == 2:
+    rizz "Subtract Two numbers";
+    rizz "The difference is: \x";
+    galvanized int result = fanumTax(int operand1 - int operand2);
+beta num == 3:
+    rizz "Multiply Two numbers";
+    rizz "The product is: \x";
+    galvanized int result = fanumTax(int operand1 * int operand2);
+beta num == 4:
+    rizz "Divide Two numbers";
+    rizz "The quotient is: \x";
+    galvanized int result = fanumTax(int operand1 / int operand2);
+sigma:
+    rizz "Wrong input!!!";
+    galvanized int correct = 0;
+goon;
+
+alpha correct == 1:
+    rizz int result;
+goon;
+
+edge int i = 0:
+    ; block 
+    blow;
+buss;

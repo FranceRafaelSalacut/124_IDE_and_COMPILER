@@ -1,6 +1,6 @@
 
 PUNCTUATOR = ['(', ')', ";", '"', ':']
-OPERATOR = ['=', '-', "+", "*", "/", "=="]
+OPERATOR = ['=', '-', "+", "*", "/", "==", "<=", ">="]
 
 def Terminal(token, symbols, literals):
     if type(token) == list:
@@ -22,6 +22,12 @@ def Terminal(token, symbols, literals):
         return "m"
     elif token == "goon":
         return "n"
+    elif token == "edge":
+        return "ed"
+    elif token == "buss":
+        return "buss"
+    elif token == "blow":
+        return "blow"
     elif token in ('int', 'char'):
         symbols["var"] = token
         return token

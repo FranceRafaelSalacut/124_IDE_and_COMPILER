@@ -4,7 +4,7 @@ import re
 import os
 
 D_TYPE = ['int', 'char', 'string']
-K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon']
+K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon', 'edge', 'blow', 'buss']
 PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
 
@@ -20,7 +20,7 @@ table = [
 
 def manual_tokenize_(str):
     tokens = []
-    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<", ">", ":"]
+    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<=", ">=" ,"<", ">", ":"]
 
     pattern = f"({'|'.join(map(re.escape, delimiter))})"
 
@@ -146,7 +146,6 @@ if __name__ == "__main__":
             asm = generator.CodeGenerator(tokens, symbols, literals, None)
             asm.compile()
             asm.run()
-
             # print(tokens, "\n")
             # for token in tokens:
             #     print(token)
