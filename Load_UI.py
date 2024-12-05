@@ -221,20 +221,16 @@ class MainUI(QMainWindow):
     def Compile(self):
     # Step 1: Get code from the Code_Area
         self.Code = self.Code_Area.toPlainText()
-        
+        print(self.Code)
         # Step 2: Tokenize the code using the Scanner
         
-        scanner = Scanner(self.Code)
+        print(self.Code.split('\n'))
+        scanner = Scanner(self.Code.split('\n'))
         
         # Step 3: Initialize the Parser with the Scanner
         parser = Parser(scanner)
         
         # Step 4: Parse the code
-        # try:
-        # message = parser.parse()
-        # if message != 1:
-        #     # print("errr")
-        #     print(message)
         message = parser.parse()
         if message != 1:
             print(f"Message: {message}")  # Check the content of `message`
@@ -256,6 +252,18 @@ class MainUI(QMainWindow):
                 cursor.insertText(str(message) + "\n")  # Safely convert `message` to a string
             except Exception as e:
                 print(f"Error while inserting message: {e}")
+
+            cursor.setCharFormat(default_format)
+            self.consoleEditor.update()  # Force update
+        else:
+            cursor = self.consoleEditor.textCursor()
+            cursor.movePosition(cursor.End)
+            default_format = self.consoleEditor.currentCharFormat()
+            error_format = QTextCharFormat()
+            error_format.setForeground(QColor("#7CFC00"))
+            cursor.setCharFormat(error_format)
+
+            cursor.insertText("Compile succesful\n")
 
             cursor.setCharFormat(default_format)
             self.consoleEditor.update()  # Force update

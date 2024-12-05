@@ -15,7 +15,7 @@ class Parser:
         except Exception as e:
             error_message = (
                 f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}\n"
-                f"{self.Scanner.code[self.Scanner.currentLine]}\n"
+                f"{self.Scanner.code[self.Scanner.currentLine-2]}\n"
                 f"{e}"
             )
             return error_message
