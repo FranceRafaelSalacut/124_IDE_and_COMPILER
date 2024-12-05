@@ -11,9 +11,18 @@ class Parser:
             if self.pos < len(self.tokens):
                 raise SyntaxError("Unexpected token: {}".format(self.tokens[self.pos]))
             print("You passed the test")
+            return 1
         except Exception as e:
-            print(f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}")
-            print(f"{self.Scanner.code[self.Scanner.currentLine]}\n{e}")
+            error_message = (
+                f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}\n"
+                f"{self.Scanner.code[self.Scanner.currentLine]}\n"
+                f"{e}"
+            )
+            return error_message
+            # print(f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}")
+            # print(f"{self.Scanner.code[self.Scanner.currentLine]}\n{e}")
+            
+            # return 
 
     
     def fetchTokens(self):
@@ -239,8 +248,8 @@ class Parser:
             raise SyntaxError("Expected d")
 
 # Example usage
-from compiler.code_generator import CodeGenerator
-from Scanner import testing as tt
+# from compiler.code_generator import CodeGenerator
+# from Scanner import testing as tt
 
 # token = []
 # for x in tt():
@@ -252,9 +261,9 @@ from Scanner import testing as tt
 #print(token[185:])
 
 #print(len(token))
-parser = Parser(tt())
-parser.parse()
-# print(parser.Scanner.tokens)
-cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
-cg.compile()
-cg.run()
+# parser = Parser(tt())
+# parser.parse()
+# # print(parser.Scanner.tokens)
+# cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
+# cg.compile()
+# cg.run()

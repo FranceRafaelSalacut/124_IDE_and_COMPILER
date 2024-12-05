@@ -1,8 +1,12 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QShortcut, QMessageBox, QVBoxLayout, QWidget, QTextEdit
+from PyQt5.QtGui import QTextCharFormat, QColor
+
 from PyQt5.QtGui import QKeySequence
 from PyQt5.uic import loadUi
 from tkinter import *
 from tkinter import filedialog
+from Scanner import Scanner  # Ensure Scanner is properly imported
+from Parser1 import Parser
 import sys
 
 from Line_Numbered_Editor import LineNumberedTextEdit
@@ -208,11 +212,71 @@ class MainUI(QMainWindow):
             # container.setLayout(None)  # Clear the layout from the main widget
         container.setStyleSheet("QWidget{background: transparent;}")
 
+    # def Compile(self):
+    #     self.Code =  self.Code_Area.toPlainText()
+    #     # Compiler(self.Code, Current_File)
+
+    #     print(self.Code)
+    #     print(self.Current_File)
     def Compile(self):
-        self.Code =  self.Code_Area.toPlainText()
-        # Compiler(self.Code, Current_File)
-        print(self.Code)
-        print(self.Current_File)
+    # Step 1: Get code from the Code_Area
+        self.Code = self.Code_Area.toPlainText()
+        
+        # Step 2: Tokenize the code using the Scanner
+        
+        scanner = Scanner(self.Code)
+        
+        # Step 3: Initialize the Parser with the Scanner
+        parser = Parser(scanner)
+        
+        # Step 4: Parse the code
+        # try:
+        # message = parser.parse()
+        # if message != 1:
+        #     # print("errr")
+        #     print(message)
+        message = parser.parse()
+        if message != 1:
+            print(f"Message: {message}")  # Check the content of `message`
+            self.consoleEditor = self.findChild(QTextEdit, "consoleEditor")
+            if not self.consoleEditor:
+                print("Error: consoleEditor not found in the UI.")  # Check if `consoleEditor` exists
+                return
+
+            # Continue as before
+            cursor = self.consoleEditor.textCursor()
+            cursor.movePosition(cursor.End)
+            default_format = self.consoleEditor.currentCharFormat()
+            error_format = QTextCharFormat()
+            error_format.setForeground(QColor("#ff0000"))
+            cursor.setCharFormat(error_format)
+
+            # Ensure `message` is a string
+            try:
+                cursor.insertText(str(message) + "\n")  # Safely convert `message` to a string
+            except Exception as e:
+                print(f"Error while inserting message: {e}")
+
+            cursor.setCharFormat(default_format)
+            self.consoleEditor.update()  # Force update
+
+
+
+
+        #     print("Parsing completed successfully!")
+        # except Exception as e:
+        #     print("An error occurred during parsing:", e)
+        
+        # Step 5 (Optional): Initialize the CodeGenerator and compile the code
+        from compiler.code_generator import CodeGenerator
+        cg = CodeGenerator(
+            parser.Scanner.tokens, 
+            parser.Scanner.symbolTable, 
+            parser.Scanner.literalTable, 
+            None
+        )
+        #cg.compile()
+        #cg.run()
 
     def Execute(self):
         print(self.Code)
