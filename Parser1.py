@@ -1,15 +1,33 @@
 class Parser:
-    def __init__(self, tokens):
-        self.tokens = tokens
-        self.pos = 58
+    def __init__(self, Scanner):
+        self.tokens = Scanner.tokenStream()
+        self.pos = 0
         self.loop = False
+        self.Scanner = Scanner
 
     def parse(self):
-        self.S()
-        if self.pos < len(self.tokens):
-            raise SyntaxError("Unexpected token: {}".format(self.tokens[self.pos]))
-        print("You passed the test")
+        try:
+            self.S()
+            if self.pos < len(self.tokens):
+                raise SyntaxError("Unexpected token: {}".format(self.tokens[self.pos]))
+            print("You passed the test")
+        except Exception as e:
+            print(f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}")
+            print(f"{self.Scanner.code[self.Scanner.currentLine]}\n{e}")
 
+    
+    def fetchTokens(self):
+        tokens = self.Scanner.tokenStream()
+        if not tokens:
+            return
+
+        self.tokens = tokens
+        self.pos = 0
+
+    def checkTokens(self):
+        if self.pos >= len(self.tokens):
+            self.fetchTokens()    
+    
     def S(self):
         if self.pos < len(self.tokens):
             if self.tokens[self.pos] == 'r':
@@ -49,6 +67,7 @@ class Parser:
         # ε is handled by doing nothing
 
     def S_prime(self):
+        self.checkTokens()    
         if self.pos < len(self.tokens):
             self.S()
 
@@ -174,6 +193,7 @@ class Parser:
     def B_prime(self):
         self.S()
         #self.match(';')
+        self.checkTokens()
         self.F_prime()
 
     def F(self):
@@ -219,12 +239,12 @@ class Parser:
             raise SyntaxError("Expected d")
 
 # Example usage
-from Scanner import Scanner as SC
+import Scanner
 from Scanner import testing as tt
 
-token = []
-for x in tt():
-    token.append(x[1])
+# token = []
+# for x in tt():
+#     token.append(x[1])
 
 #print(token)
 
@@ -232,5 +252,6 @@ for x in tt():
 #print(token[185:])
 
 #print(len(token))
-parser = Parser(token)
+abc = [123]
+parser = Parser(tt())
 parser.parse()

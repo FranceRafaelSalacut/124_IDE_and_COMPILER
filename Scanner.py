@@ -3,149 +3,175 @@ import compiler.code_generator as generator
 import re
 import os
 
-D_TYPE = ['int', 'char', 'string']
-K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon', 'edge', 'blow', 'buss']
-PUNCTUATOR = ['(', ')', ";", '"', ':']
-OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
+class Scanner:
+    def __init__(self, code):
+        self.symbolTable = {}
+        self.literalTable = {}
+        self.tokens = []
+        self.currentLine = 1
+        self.code = code
 
-table = [
-[1,	2,	6,	4,	6,	1,	1,	1,	6, 4, 4],
-[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
-[6,	3,	2,	6,	6,	6,	6,	6,	6, 6, 6],
-[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
-[6,	6,	6,	6,	5,	6,	6,	6,	6, 6, 6],
-[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
-[0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
-]
+        self.D_TYPE = ['int', 'char', 'string']
+        self.K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon', 'edge', 'blow', 'buss']
+        self.PUNCTUATOR = ['(', ')', ";", '"', ':']
+        self.OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
 
-def manual_tokenize_(str):
-    tokens = []
-    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<=", ">=" ,"<", ">", ":"]
+        self.table = [
+        [1,	2,	6,	4,	6,	1,	1,	1,	6, 4, 4],
+        [0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+        [6,	3,	2,	6,	6,	6,	6,	6,	6, 6, 6],
+        [0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+        [6,	6,	6,	6,	5,	6,	6,	6,	6, 6, 6],
+        [0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+        [0,	0,	0,	0,	0,	0,	0,	0,	0, 0, 0],
+        ]
 
-    pattern = f"({'|'.join(map(re.escape, delimiter))})"
+    def manual_tokenize_(self, str):
+        tokens = []
+        delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<=", ">=" ,"<", ">", ":"]
 
-    # Split the string and include the delimiters
-    result = re.split(pattern, str)
+        pattern = f"({'|'.join(map(re.escape, delimiter))})"
 
-    # Remove empty strings from the result
-    tokens = list(filter(None, result))
+        # Split the string and include the delimiters
+        result = re.split(pattern, str)
 
-    temp = []
-    literalCheck = False
-    literal = ""
+        # Remove empty strings from the result
+        tokens = list(filter(None, result))
 
-    for tok in tokens:
-        if tok == '\"':
-            literalCheck = not literalCheck
-            if not literalCheck:
-                temp.append(literal)
-                literal = ''
-            temp.append('\"')
-        elif literalCheck:
-            literal += tok
-        elif tok != " " and tok != "\n":
-            temp.append(tok)
-        
-    tokens = temp
+        temp = []
+        literalCheck = False
+        literal = ""
 
-    print("tokens", tokens)
-    return tokens
-
-def classify(token):
-    if token == "alpha":
-        return 9
-    elif token == "beta":
-        return 10
-    elif token in K_WORD:
-        return 0
-    elif token == '"':
-        return 1
-    elif token in PUNCTUATOR:
-        return 7
-    elif token in D_TYPE:
-        return 3
-    elif type(token) == list:
-        return 4
-    elif token in OPERATOR:
-        return 5
-    elif token.isdigit():
-        return 6
-    elif type(token) == str:
-        return 2
-    else:
-        return 8
-    
-def classify2(token):
-    if token in K_WORD:
-        return "Keyword"
-    elif token in PUNCTUATOR:
-        return "Punctuator"
-    elif token in D_TYPE:
-        return "Data Type"
-    elif type(token) == list:
-        return "Identifier"
-    elif token in OPERATOR:
-        return "Operataor"
-    elif token.isdigit():
-        return "Constant"
-    elif type(token) == str:
-        return "Literal"
-    else:
-        return "Unidentified"
-
-def Tokenize(token, symbolTable, literalTable):
-    terminal = T(token, symbolTable, literalTable)
-    return (classify2(token), terminal)
-
-def Test_Print(token):
-    for tok in token:
-        print(tok, end = ")(")
-    print()
-
-def Scanner(line): 
-    Token = manual_tokenize_(line)
-    Tokenized = []
-    state = 0
-    literal = 0
-    expect_identifier = False
-    symbolTable = {"var": "None"}
-    literalTable = {'d': 0, 'w' : 0}
-
-    for tok in Token:
-        state = table[state][classify(tok)]
-
-        if classify2(tok) == "Literal":
-            literal+=1
-        else:
-            literal=0
-
-        if expect_identifier:
-            Tokenized.append(Tokenize([tok], symbolTable, literalTable))
-            expect_identifier = False
-        else:
-            if literal <= 1:
-                Tokenized.append(Tokenize(tok, symbolTable, literalTable))
+        for tok in tokens:
+            if tok == '\"':
+                literalCheck = not literalCheck
+                if not literalCheck:
+                    temp.append(literal)
+                    literal = ''
+                temp.append('\"')
+            elif literalCheck:
+                literal += tok
+            elif tok != " " and tok != "\n":
+                temp.append(tok)
             
+        tokens = temp
 
-        if state == 1 or state == 3 or state == 5 or state == 6:
-            state = 0
+        # print("tokens", tokens)
+        return tokens
 
-        if state == 4:
-            expect_identifier = True
+    def classify(self, token):
+        if token == "alpha":
+            return 9
+        elif token == "beta":
+            return 10
+        elif token in self.K_WORD:
+            return 0
+        elif token == '"':
+            return 1
+        elif token in self.PUNCTUATOR:
+            return 7
+        elif token in self.D_TYPE:
+            return 3
+        elif type(token) == list:
+            return 4
+        elif token in self.OPERATOR:
+            return 5
+        elif token.isdigit():
+            return 6
+        elif type(token) == str:
+            return 2
+        else:
+            return 8
+        
+    def classify2(self, token):
+        if token in self.K_WORD:
+            return "Keyword"
+        elif token in self.PUNCTUATOR:
+            return "Punctuator"
+        elif token in self.D_TYPE:
+            return "Data Type"
+        elif type(token) == list:
+            return "Identifier"
+        elif token in self.OPERATOR:
+            return "Operataor"
+        elif token.isdigit():
+            return "Constant"
+        elif type(token) == str:
+            return "Literal"
+        else:
+            return "Unidentified"
 
-    return Tokenized, symbolTable, literalTable
+    def Tokenize(self, token, symbolTable, literalTable):
+        terminal = T(token, symbolTable, literalTable)
+        return (self.classify2(token), terminal)
+
+    def Test_Print(token):
+        for tok in token:
+            print(tok, end = ")(")
+        print()
+
+    def Scanner(self, line): 
+        Token = self.manual_tokenize_(line)
+        Tokenized = []
+        state = 0
+        literal = 0
+        expect_identifier = False
+        symbolTable = {"var": "None"}
+        literalTable = {'d': 0, 'w' : 0}
+
+        for tok in Token:
+            state = self.table[state][self.classify(tok)]
+
+            if self.classify2(tok) == "Literal":
+                literal+=1
+            else:
+                literal=0
+
+            if expect_identifier:
+                Tokenized.append(self.Tokenize([tok], symbolTable, literalTable))
+                expect_identifier = False
+            else:
+                if literal <= 1:
+                    Tokenized.append(self.Tokenize(tok, symbolTable, literalTable))
+                
+
+            if state == 1 or state == 3 or state == 5 or state == 6:
+                state = 0
+
+            if state == 4:
+                expect_identifier = True
+
+        return Tokenized, symbolTable, literalTable
+
+    def tokenStream(self):
+        if self.currentLine-1 > len(self.code) - 1:
+            return None
+
+        tokens, symbolTable, literalTable = self.Scanner(self.code[self.currentLine-1])
+        self.tokens.extend(tokens)
+        self.symbolTable.update(symbolTable)
+        self.literalTable.update(literalTable)
+
+        self.currentLine += 1
+        return list(map(lambda x: x[1], tokens))
 
 
 if __name__ == "__main__":
     with open('Test_case/CodeTest.txt', 'r') as file:
+            
+            # print(file.read().split('\n'))
+            # for i in file.readlines().join().split('\n'):
+            #     print(i)
             content = ""
             for line in file:
                 content += line.strip('\n')    
                 
-            tokens, symbols, literals = Scanner(content)
-            asm = generator.CodeGenerator(tokens, symbols, literals, None)
-            asm.compile()
-            asm.run()
+            sc = Scanner(content)
+            print(sc.tokenStream())
+            # tokens, symbols, literals = sc.Scanner(content)
+            # asm = generator.CodeGenerator(tokens, symbols, literals, None)
+            # asm.compile()
+            # asm.run()
             # print(tokens, "\n")
             # for token in tokens:
             #     print(token)
@@ -169,10 +195,12 @@ if __name__ == "__main__":
 
 def testing():
     with open('Test_case/CodeTest.txt', 'r') as file:
-        content = ""
-        for line in file:
-            content += line.strip('\n')    
-                
-        tokens, symbols, literals = Scanner(content)
+        # content = ""
+        # for line in file:
+        #     content += line.strip('\n')    
+        
+        content = file.read().split('\n')
+        sc = Scanner(content)
+        # tokens, symbols, literals = sc.Scanner(content)
 
-        return tokens
+        return sc
