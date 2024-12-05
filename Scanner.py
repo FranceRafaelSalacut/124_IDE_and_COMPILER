@@ -3,7 +3,7 @@ import re
 import os
 
 D_TYPE = ['int']
-K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma']
+K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon']
 PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
 
@@ -29,9 +29,25 @@ def manual_tokenize_(str):
     # Remove empty strings from the result
     tokens = list(filter(None, result))
 
-    tokens = [tok for tok in tokens if tok != " "]
-    tokens = [tok for tok in tokens if tok != "\n"]
-    #print(tokens)
+    temp = []
+    literalCheck = False
+    literal = ""
+
+    for tok in tokens:
+        if tok == '\"':
+            literalCheck = not literalCheck
+            if not literalCheck:
+                temp.append(literal)
+                literal = ''
+            temp.append('\"')
+        elif literalCheck:
+            literal += tok
+        elif tok != " " and tok != "\n":
+            temp.append(tok)
+        
+    tokens = temp
+
+    #print("tokens", tokens)
     return tokens
 
 def classify(token):
@@ -76,8 +92,9 @@ def classify2(token):
     else:
         return "Unidentified"
 
-def Tokenize(token):
-    return (classify2(token), T(token))
+def Tokenize(token, symbolTable, literalTable):
+    terminal = T(token, symbolTable, literalTable)
+    return (classify2(token), terminal)
 
 def Test_Print(token):
     for tok in token:
@@ -90,6 +107,8 @@ def Scanner(line):
     state = 0
     literal = 0
     expect_identifier = False
+    symbolTable = {}
+    literalTable = {'d': 0, 'w' : 0}
 
     for tok in Token:
         state = table[state][classify(tok)]
@@ -100,11 +119,11 @@ def Scanner(line):
             literal=0
 
         if expect_identifier:
-            Tokenized.append(Tokenize([tok]))
+            Tokenized.append(Tokenize([tok], symbolTable, literalTable))
             expect_identifier = False
         else:
             if literal <= 1:
-                Tokenized.append(Tokenize(tok))
+                Tokenized.append(Tokenize(tok, symbolTable, literalTable))
             
 
         if state == 1 or state == 3 or state == 5 or state == 6:
@@ -113,19 +132,47 @@ def Scanner(line):
         if state == 4:
             expect_identifier = True
 
-    return Tokenized
+    return Tokenized, symbolTable, literalTable
 
 
-def testing_attention_please():
-    return_this = []
-    with open('Test_case/ScannerTest.txt', 'r') as file:
+if __name__ == "__main__":
+    with open('Test_case/CodeTest.txt', 'r') as file:
+            content = ""
+            for line in file:
+                content += line.strip('\n')    
+                
+            tokens, symbols, literals = Scanner(content)
+            #asm = generator.CodeGenerator(tokens, symbols, literals, None)
+            #asm.compile()
+            #asm.run()
+
+            # print(tokens, "\n")
+            # for token in tokens:
+            #     print(token)
+            # print(symbols, "\n")
+            # print(literals, "\n")
+
+
+# with open('Test_case/ScannerTest.txt', 'r') as file:
+#     generate = True
+
+#     for line in file:
+#         print(line, end="")
+#         tokens, symbols, literals = Scanner(line)
+#         if generate:
+#             asm = generator.CodeGenerator(tokens, symbols, literals, None)
+#             asm.generateMachineCode()
+#             generate = False
+#         print(tokens, end="\n\n")
+#         print(symbols)
+#         print(literals)
+
+def testing():
+    with open('Test_case/CodeTest.txt', 'r') as file:
+        content = ""
         for line in file:
-            #print(line, end="")
-            #print(Scanner(line), end="\n\n")
-            return_this.extend(Scanner(line))
+            content += line.strip('\n')    
+                
+        tokens, symbols, literals = Scanner(content)
 
-    
-    return return_this
-
-
-
+        return tokens

@@ -1,12 +1,14 @@
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
-        self.pos = 0
+        self.pos = 58
+        self.loop = False
 
     def parse(self):
         self.S()
         if self.pos < len(self.tokens):
             raise SyntaxError("Unexpected token: {}".format(self.tokens[self.pos]))
+        print("You passed the test")
 
     def S(self):
         if self.pos < len(self.tokens):
@@ -18,25 +20,32 @@ class Parser:
                 self.O()
             elif self.tokens[self.pos] == 'b':
                 self.I()
-            elif self.tokens[self.pos] == 'H':
+            elif self.tokens[self.pos] == 'h':
                 self.C()
             elif self.tokens[self.pos] == 'int':
                 self.T()
             else:
+                print(f"what position ? {self.pos}")
                 raise SyntaxError("Expected P, D, O, I, T, or C")
         # S' -> ε (do nothing if no valid token)
 
     def P(self):
         self.match('r')
         self.P_prime()
+        if self.loop:
+            return
         self.S_prime()
 
     def P_prime(self):
-        if self.pos < len(self.tokens) and self.tokens[self.pos] == 'w':
-            self.match('w')
+        if self.pos < len(self.tokens) and self.tokens[self.pos] == '"':
+            self.match('"')
+            self.match2("w")
+            self.match('"')
+            self.match(";")
         elif self.tokens[self.pos] == 'int':
             self.T()
             self.var()
+            self.match(";")
         # ε is handled by doing nothing
 
     def S_prime(self):
@@ -56,10 +65,19 @@ class Parser:
     def O(self):
         self.match('f')
         self.match('(')
-        self.d()
-        self.Op()
-        self.d()
+        if self.tokens[self.pos] == 'int':
+            self.T()
+            self.var()
+            self.Op()
+            self.T()
+            self.var()
+        else:
+            self.d()
+            self.Op()
+            self.d()
         self.match(')')
+        if self.loop:
+            return
         self.S_prime()
 
     def Op(self):
@@ -73,6 +91,9 @@ class Parser:
         self.T()
         self.var()
         self.A()
+        self.match(";")
+        if self.loop:
+            return
         self.S_prime()
 
     def A(self):
@@ -83,46 +104,58 @@ class Parser:
 
     def A_prime(self):
         if self.pos < len(self.tokens):
-            if self.tokens[self.pos] in {'f', 'd', 'int'}:
+            if self.pos < len(self.tokens) and self.tokens[self.pos] == 'f':
                 self.O()
-            else:
+            elif self.pos < len(self.tokens) and 'd' in self.tokens[self.pos]:
                 self.d()
+            else:
+                self.T()
                 self.var()
+    
 
     def C(self):
-        self.match('H')
+        self.loop = True
         self.H()
-        self.H_prime()
+        if self.tokens[self.pos] != 'n':
+            self.H_prime()
+        self.match('n')
+        self.match(";")
+        self.loop = False
+        self.S_prime()
 
     def H(self):
         self.match('h')
-        self.match('(')
         self.var()
         self.match('==')
         self.d()
-        self.match(')')
+        self.match(':')
         self.B()
-        self.match('g')
 
     def H_prime(self):
         if self.pos < len(self.tokens):
             self.E()
+            if self.tokens[self.pos] == 'n':
+                return
             self.M_prime()
         # ε is handled by doing nothing
 
     def E(self):
         self.match('e')
-        self.match('(')
         self.var()
         self.match('==')
         self.d()
-        self.match(')')
+        self.match(':')
         self.B()
         self.E_prime()
 
     def E_prime(self):
         if self.pos < len(self.tokens):
-            self.E()
+            if self.tokens[self.pos] == 'm':
+                return
+            elif self.tokens[self.pos] == 'n':
+                return
+            else:
+                self.E()
         # ε is handled by doing nothing
 
     def M_prime(self):
@@ -132,17 +165,16 @@ class Parser:
 
     def M(self):
         self.match('m')
+        self.match(":")
         self.B()
 
     def B(self):
-        self.match('{')
         self.B_prime()
-        self.match('}')
 
     def B_prime(self):
         self.S()
-        self.match(';')
-        self.F()
+        #self.match(';')
+        self.F_prime()
 
     def F(self):
         self.S()
@@ -150,11 +182,24 @@ class Parser:
 
     def F_prime(self):
         if self.pos < len(self.tokens):
-            self.F()
+            if self.tokens[self.pos] == 'e':
+                return
+            elif self.tokens[self.pos] == 'm':
+                return
+            elif self.tokens[self.pos] == 'n':
+                return
+            else:
+                self.B()
         # ε is handled by doing nothing
 
     def match(self, token_type):
         if self.pos < len(self.tokens) and self.tokens[self.pos] == token_type:
+            self.pos += 1
+        else:
+            raise SyntaxError("Expected token: {}".format(token_type))
+        
+    def match2(self, token_type):
+        if self.pos < len(self.tokens) and token_type in self.tokens[self.pos]:
             self.pos += 1
         else:
             raise SyntaxError("Expected token: {}".format(token_type))
@@ -175,11 +220,17 @@ class Parser:
 
 # Example usage
 from Scanner import Scanner as SC
-from Scanner import testing_attention_please as tt
+from Scanner import testing as tt
+
+token = []
+for x in tt():
+    token.append(x[1])
+
+#print(token)
 
 
-print(tt())
+#print(token[185:])
 
-
-#parser = Parser(tokens)
-#parser.parse()
+#print(len(token))
+parser = Parser(token)
+parser.parse()
