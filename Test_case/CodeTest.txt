@@ -11,7 +11,7 @@ rizz "Enter a number: \x";
 skibidi int num;
 galvanized int correct = 1;
 alpha num == 1:
-    rizz "Add Two numbers"
+    rizz "Add Two numbers";
     rizz "The sum is: \x";
     galvanized int result = fanumTax(int operand1 + int operand2);
 beta num == 2:

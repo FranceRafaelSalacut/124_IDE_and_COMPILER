@@ -4,6 +4,7 @@ import subprocess
 class CodeGenerator:
     def __init__(self, tokens, symbols, literals, filepath):
         self.tokens = tokens
+        print(self.tokens)
         self.symbolTable = symbols
         self.literalTable = literals
         self.filepath = filepath
@@ -233,3 +234,4 @@ class CodeGenerator:
     def run(self):
         print("[CMD] Running")
         subprocess.run("compiler/test.exe")
+        # os.system("start compiler\\test.exe")

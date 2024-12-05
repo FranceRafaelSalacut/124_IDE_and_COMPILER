@@ -5,8 +5,8 @@ import os
 
 class Scanner:
     def __init__(self, code):
-        self.symbolTable = {}
-        self.literalTable = {}
+        self.symbolTable = {"var": "None"}
+        self.literalTable = {'d': 0, 'w' : 0}
         self.tokens = []
         self.currentLine = 1
         self.code = code
@@ -101,8 +101,8 @@ class Scanner:
         else:
             return "Unidentified"
 
-    def Tokenize(self, token, symbolTable, literalTable):
-        terminal = T(token, symbolTable, literalTable)
+    def Tokenize(self, token):
+        terminal = T(token, self.symbolTable, self.literalTable)
         return (self.classify2(token), terminal)
 
     def Test_Print(token):
@@ -116,8 +116,6 @@ class Scanner:
         state = 0
         literal = 0
         expect_identifier = False
-        symbolTable = {"var": "None"}
-        literalTable = {'d': 0, 'w' : 0}
 
         for tok in Token:
             state = self.table[state][self.classify(tok)]
@@ -128,11 +126,11 @@ class Scanner:
                 literal=0
 
             if expect_identifier:
-                Tokenized.append(self.Tokenize([tok], symbolTable, literalTable))
+                Tokenized.append(self.Tokenize([tok]))
                 expect_identifier = False
             else:
                 if literal <= 1:
-                    Tokenized.append(self.Tokenize(tok, symbolTable, literalTable))
+                    Tokenized.append(self.Tokenize(tok))
                 
 
             if state == 1 or state == 3 or state == 5 or state == 6:
@@ -141,16 +139,19 @@ class Scanner:
             if state == 4:
                 expect_identifier = True
 
-        return Tokenized, symbolTable, literalTable
+        return Tokenized
 
     def tokenStream(self):
+        while self.currentLine < len(self.code) and len(self.code[self.currentLine- 1]) == 0:
+            self.currentLine += 1
+
         if self.currentLine-1 > len(self.code) - 1:
             return None
+        
 
-        tokens, symbolTable, literalTable = self.Scanner(self.code[self.currentLine-1])
+        tokens = self.Scanner(self.code[self.currentLine-1])
         self.tokens.extend(tokens)
-        self.symbolTable.update(symbolTable)
-        self.literalTable.update(literalTable)
+        print(list(map(lambda x: x[1], tokens)))
 
         self.currentLine += 1
         return list(map(lambda x: x[1], tokens))
@@ -168,39 +169,12 @@ if __name__ == "__main__":
                 
             sc = Scanner(content)
             print(sc.tokenStream())
-            # tokens, symbols, literals = sc.Scanner(content)
-            # asm = generator.CodeGenerator(tokens, symbols, literals, None)
-            # asm.compile()
-            # asm.run()
-            # print(tokens, "\n")
-            # for token in tokens:
-            #     print(token)
-            # print(symbols, "\n")
-            # print(literals, "\n")
-
-
-# with open('Test_case/ScannerTest.txt', 'r') as file:
-#     generate = True
-
-#     for line in file:
-#         print(line, end="")
-#         tokens, symbols, literals = Scanner(line)
-#         if generate:
-#             asm = generator.CodeGenerator(tokens, symbols, literals, None)
-#             asm.generateMachineCode()
-#             generate = False
-#         print(tokens, end="\n\n")
-#         print(symbols)
-#         print(literals)
 
 def testing():
     with open('Test_case/CodeTest.txt', 'r') as file:
-        # content = ""
-        # for line in file:
-        #     content += line.strip('\n')    
-        
+    
         content = file.read().split('\n')
+        print(content)
         sc = Scanner(content)
-        # tokens, symbols, literals = sc.Scanner(content)
-
+        print(sc.code)
         return sc

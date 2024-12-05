@@ -239,7 +239,7 @@ class Parser:
             raise SyntaxError("Expected d")
 
 # Example usage
-import Scanner
+from compiler.code_generator import CodeGenerator
 from Scanner import testing as tt
 
 # token = []
@@ -252,6 +252,9 @@ from Scanner import testing as tt
 #print(token[185:])
 
 #print(len(token))
-abc = [123]
 parser = Parser(tt())
 parser.parse()
+# print(parser.Scanner.tokens)
+cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
+cg.compile()
+cg.run()
