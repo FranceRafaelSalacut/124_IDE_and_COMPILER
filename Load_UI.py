@@ -210,7 +210,9 @@ class MainUI(QMainWindow):
 
     def Compile(self):
         self.Code =  self.Code_Area.toPlainText()
+        # Compiler(self.Code, Current_File)
         print(self.Code)
+        print(self.Current_File)
 
     def Execute(self):
         print(self.Code)
@@ -231,9 +233,10 @@ class MainUI(QMainWindow):
     
     def Save_As(self):
         text = self.Code_Area.toPlainText()
-        file = filedialog.asksaveasfile(defaultextension='.txt',
+        file = filedialog.asksaveasfile(defaultextension='.gyatt',
                                         filetypes=[
-                                                ("Text", ".txt"),
+                                                ("Gyatt", ".gyatt"),
+                                                ("Text", ".txt"),                                                
                                                 ("All files", ".*")
                                             ]
                                         )
@@ -305,12 +308,12 @@ class MainUI(QMainWindow):
         else:
             event.ignore()  # Cancel the close
 
-# def main():
-#     app = QApplication (sys.argv)
-#     ui = MainUI()
-#     ui.show()
-#     app.exec_()
+def main():
+    app = QApplication (sys.argv)
+    ui = MainUI()
+    ui.show()
+    app.exec_()
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()

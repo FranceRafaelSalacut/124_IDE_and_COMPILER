@@ -1,9 +1,11 @@
-rizz "Hello World" ;
+rizz "Enter number 1 \x"; skibidi int num1; rizz "Enter number 2 \x"; skibidi int num2; galvanized int result = fanumTax(int num1 + int num2); rizz int result;
+galvanized int num = 13; galvanized int num2 = 17; galvanized int result = fanumTax ( 10 + 13); rizz int result;
+galvanized int num = int abd;
+rizz "Input your number \x"; skibidi int num;   rizz "Your number is \x"; rizz int num;
+fanumTax(5 + 5); fanumTax(5 * 5); fanumTax(5 - 5); fanumTax(5 / 5);
+skibidi int num; rizz "Hello World << 25 \x" ; rizz 25 ; rizz int num;
 skibidi int num ;
 galvanized int num ;
-fanumTax(5 + 5);
-rizz "Enter a string ";
-galvanized int num = fanumTax(1+1);
 alpha num == 1:
     fanumTax(1+1);
 beta num == 2:

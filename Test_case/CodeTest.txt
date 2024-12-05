@@ -34,3 +34,9 @@ goon;
 alpha correct == 1:
     rizz int result;
 goon;
+
+galvanized int num = 0;
+edge int num <= 25:
+    rizz int num;
+    galvanized int num = fanumTax(int num + 1);
+buss;

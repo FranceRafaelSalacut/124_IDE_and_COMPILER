@@ -1,10 +1,10 @@
 
 PUNCTUATOR = ['(', ')', ";", '"', ':']
-OPERATOR = ['=', '-', "+", "*", "/", "=="]
+OPERATOR = ['=', '-', "+", "*", "/", "==", "<=", ">="]
 
 def Terminal(token, symbols, literals):
     if type(token) == list:
-        symbols[token[0]] = None
+        symbols[token[0]] = symbols["var"]
         return token[0]
     elif token == "rizz":
         return "r"
@@ -22,8 +22,15 @@ def Terminal(token, symbols, literals):
         return "m"
     elif token == "goon":
         return "n"
-    elif token == 'int':
-        return "int"
+    elif token == "edge":
+        return "ed"
+    elif token == "buss":
+        return "buss"
+    elif token == "blow":
+        return "blow"
+    elif token in ('int', 'char'):
+        symbols["var"] = token
+        return token
     elif token in PUNCTUATOR or token in OPERATOR:
         return token
     elif token.isdigit():
@@ -40,5 +47,4 @@ def Terminal(token, symbols, literals):
         return key
     else:
         return "Unidentified"
-    
-    
+        

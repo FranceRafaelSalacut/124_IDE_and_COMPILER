@@ -1,9 +1,10 @@
 from Terminals import Terminal as T
+import compiler.code_generator as generator
 import re
 import os
 
-D_TYPE = ['int']
-K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon']
+D_TYPE = ['int', 'char', 'string']
+K_WORD = ['rizz', 'skibidi', 'galvanized', 'fanumTax', 'alpha', 'beta', 'sigma', 'goon', 'edge', 'blow', 'buss']
 PUNCTUATOR = ['(', ')', ";", '"', ':']
 OPERATOR = ['=', '-', "+", "*", "/", "==", ">=", "<=", "<", ">"]
 
@@ -19,7 +20,7 @@ table = [
 
 def manual_tokenize_(str):
     tokens = []
-    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<", ">", ":"]
+    delimiter = [',', ';', ' ', "==", "=", ".", "(", ")", '"', "+", "-", "*", "/", "<=", ">=" ,"<", ">", ":"]
 
     pattern = f"({'|'.join(map(re.escape, delimiter))})"
 
@@ -47,7 +48,7 @@ def manual_tokenize_(str):
         
     tokens = temp
 
-    #print("tokens", tokens)
+    print("tokens", tokens)
     return tokens
 
 def classify(token):
@@ -107,7 +108,7 @@ def Scanner(line):
     state = 0
     literal = 0
     expect_identifier = False
-    symbolTable = {}
+    symbolTable = {"var": "None"}
     literalTable = {'d': 0, 'w' : 0}
 
     for tok in Token:
@@ -142,10 +143,9 @@ if __name__ == "__main__":
                 content += line.strip('\n')    
                 
             tokens, symbols, literals = Scanner(content)
-            #asm = generator.CodeGenerator(tokens, symbols, literals, None)
-            #asm.compile()
-            #asm.run()
-
+            asm = generator.CodeGenerator(tokens, symbols, literals, None)
+            asm.compile()
+            asm.run()
             # print(tokens, "\n")
             # for token in tokens:
             #     print(token)
