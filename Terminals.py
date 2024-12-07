@@ -6,6 +6,8 @@ def Terminal(token, symbols, literals):
     if type(token) == list:
         symbols[token[0]] = symbols["var"]
         return token[0]
+    elif token in symbols.keys():
+        return token        
     elif token == "rizz":
         return "r"
     elif token == "skibidi":

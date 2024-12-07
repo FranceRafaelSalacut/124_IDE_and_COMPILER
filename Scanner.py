@@ -96,6 +96,8 @@ class Scanner:
             return "Operataor"
         elif token.isdigit():
             return "Constant"
+        elif token in self.symbolTable.keys():
+            return "Identifier"
         elif type(token) == str:
             return "Literal"
         else:
@@ -116,14 +118,17 @@ class Scanner:
         state = 0
         literal = 0
         expect_identifier = False
+        cond = False
 
         for tok in Token:
             state = self.table[state][self.classify(tok)]
-
             if self.classify2(tok) == "Literal":
                 literal+=1
             else:
                 literal=0
+            
+            if tok in ('alpha', 'beta'):
+                cond = True
 
             if expect_identifier:
                 Tokenized.append(self.Tokenize([tok]))
@@ -136,7 +141,7 @@ class Scanner:
             if state == 1 or state == 3 or state == 5 or state == 6:
                 state = 0
 
-            if state == 4:
+            if state == 4 and not cond:
                 expect_identifier = True
 
         return Tokenized

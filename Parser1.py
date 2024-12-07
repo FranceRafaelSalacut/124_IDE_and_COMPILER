@@ -4,7 +4,11 @@ class Parser:
         self.pos = 0
         self.loop = False
         self.Scanner = Scanner
-
+        self.keywords = {   "r": "rizz", "b": "skibidi", "f": "fanumTax", "g": "galvanized", "h": "alpha",
+                            "e": "beta", "m": "sigma", "n": "goon", "ed": "edge", "buss": "buss" ,"\"": "\"",
+                            ";": ";", ":": ":", "(": "(", ")": ")"
+                        }
+    
     def parse(self):
         try:
             self.S()
@@ -14,7 +18,7 @@ class Parser:
             return 1
         except Exception as e:
             error_message = (
-                f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}\n"
+                f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos}\n"
                 f"{self.Scanner.code[self.Scanner.currentLine-2]}\n"
                 f"{e}"
             )
@@ -24,7 +28,6 @@ class Parser:
             
             # return 
 
-    
     def fetchTokens(self):
         tokens = self.Scanner.tokenStream()
         if not tokens:
@@ -36,7 +39,11 @@ class Parser:
     def checkTokens(self):
         if self.pos >= len(self.tokens):
             self.fetchTokens()    
-    
+
+    def checkBlockStatements(self):
+        if self.pos >= len(self.tokens):
+            raise SyntaxError("Ermmm what the Sigma! Expected Statements in block. ")
+
     def S(self):
         if self.pos < len(self.tokens):
             if self.tokens[self.pos] == 'r':
@@ -53,7 +60,11 @@ class Parser:
                 self.T()
             else:
                 print(f"what position ? {self.pos}")
-                raise SyntaxError("Expected P, D, O, I, T, or C")
+                # raise SyntaxError("Expected P, D, O, I, T, or C")
+                if self.tokens[self.pos] in self.keywords.keys():
+                    raise SyntaxError(f"Unexpected keyword \"{self.keywords[self.tokens[self.pos]]}\"")
+                else:
+                    raise SyntaxError(f"Invalid keyword \"{self.Scanner.literalTable[self.tokens[self.pos]]}\"")
         # S' -> ε (do nothing if no valid token)
 
     def P(self):
@@ -144,6 +155,7 @@ class Parser:
     def C(self):
         self.loop = True
         self.H()
+        self.checkBlockStatements()
         if self.tokens[self.pos] != 'n':
             self.H_prime()
         self.match('n')
@@ -162,6 +174,7 @@ class Parser:
     def H_prime(self):
         if self.pos < len(self.tokens):
             self.E()
+            self.checkBlockStatements()
             if self.tokens[self.pos] == 'n':
                 return
             self.M_prime()
@@ -225,20 +238,23 @@ class Parser:
         if self.pos < len(self.tokens) and self.tokens[self.pos] == token_type:
             self.pos += 1
         else:
-            raise SyntaxError("Expected token: {}".format(token_type))
+            raise SyntaxError("Expected token: \"{}\"".format(self.keywords[token_type]))
         
     def match2(self, token_type):
         if self.pos < len(self.tokens) and token_type in self.tokens[self.pos]:
             self.pos += 1
         else:
-            raise SyntaxError("Expected token: {}".format(token_type))
+            raise SyntaxError("Expected token: \"{}\"".format(self.keywords[token_type]))
 
     def var(self):
         # Assuming var is a valid identifier
-        if self.pos < len(self.tokens) and self.tokens[self.pos].isidentifier():
+        if self.pos < len(self.tokens) and not self.tokens[self.pos].isidentifier():
+            raise SyntaxError(f"\"{self.tokens[self.pos]}\" is not a valid identifier.")
+        
+        if self.pos < len(self.tokens) and self.tokens[self.pos] in self.Scanner.symbolTable.keys():
             self.pos += 1
         else:
-            raise SyntaxError("Expected variable")
+            raise SyntaxError(f"Expected variable. \"{self.Scanner.literalTable[self.tokens[self.pos]]}\" referenced before declared.")
 
     def d(self):
         # Assuming d is some valid token (could be an identifier or literal)
@@ -248,22 +264,26 @@ class Parser:
             raise SyntaxError("Expected d")
 
 # Example usage
-# from compiler.code_generator import CodeGenerator
-# from Scanner import testing as tt
+if __name__ == '__main__':
+    from compiler.code_generator import CodeGenerator
+    from Scanner import testing as tt
 
-# token = []
-# for x in tt():
-#     token.append(x[1])
+    # token = []
+    # for x in tt():
+    #     token.append(x[1])
 
-#print(token)
+    #print(token)
 
 
-#print(token[185:])
+    #print(token[185:])
 
-#print(len(token))
-# parser = Parser(tt())
-# parser.parse()
-# # print(parser.Scanner.tokens)
-# cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
-# cg.compile()
-# cg.run()
+    #print(len(token))
+    parser = Parser(tt())
+    out = parser.parse()
+    if out == 1:
+        # print(parser.Scanner.tokens)
+        cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
+        cg.compile()
+        # cg.run()
+    else:
+        print(out)
