@@ -84,12 +84,12 @@ class CodeGenerator:
                 #     op = self.tokens[i+4][1]
                 #     i += 5  
                 
-                if self.tokens[i][0] == 'Constant':
-                    constant2 = self.tokens[i][1]
-                    i += 2
-                else:
-                    constant2 = self.tokens[i+1][1]
-                    i += 3
+                # if self.tokens[i][0] == 'Constant':
+                constant2 = self.tokens[i][1]
+                i += 2
+                # else:
+                #     constant2 = self.tokens[i+1][1]
+                #     i += 3
 
                 
                 if op == '+':
