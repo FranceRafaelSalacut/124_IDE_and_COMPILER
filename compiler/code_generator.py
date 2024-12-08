@@ -61,8 +61,8 @@ class CodeGenerator:
                     i+= 2
                 else:
                     asm.write(f'\tlea rcx, [fmt]\n')
-                    if self.tokens[i][0] != 'Constant':
-                        i+=1
+                    # if self.tokens[i][0] != 'Constant':
+                    #     i+=1
                     asm.write(f'\tmov rdx, qword [{self.tokens[i][1]}]\n')
                     asm.write('\txor rax, rax\n')
                     asm.write('\tcall printf\n')
@@ -75,14 +75,14 @@ class CodeGenerator:
                 asm.write('\txor rax, rax\n')
                 asm.write('\tcall scanf\n')
             elif self.tokens[i][1] == 'f':          # fanumTax operation
-                if self.tokens[i+2][0] == 'Constant':
-                    constant1 = self.tokens[i+2][1]
-                    op = self.tokens[i+3][1]
-                    i += 4  
-                else:
-                    constant1 = self.tokens[i+3][1]
-                    op = self.tokens[i+4][1]
-                    i += 5  
+                # if self.tokens[i+2][0] == 'Constant':
+                constant1 = self.tokens[i+2][1]
+                op = self.tokens[i+3][1]
+                i += 4  
+                # else:
+                #     constant1 = self.tokens[i+3][1]
+                #     op = self.tokens[i+4][1]
+                #     i += 5  
                 
                 if self.tokens[i][0] == 'Constant':
                     constant2 = self.tokens[i][1]
@@ -187,21 +187,17 @@ class CodeGenerator:
                 nthLoop += 1
                 asm.write(f'Loop{nthLoop}:\n\n')
                 i += 1
-                if self.tokens[i][0] == "Constant":
-                    LHS = self.tokens[i][1]
-                    operation = self.tokens[i+1][1]
-                    i += 2
-                else:
-                    LHS = self.tokens[i+1][1]
-                    operation = self.tokens[i+2][1]
-                    i += 3
+                # if self.tokens[i][0] == "Constant":
+                LHS = self.tokens[i][1]
+                operation = self.tokens[i+1][1]
+                i += 2
                 
-                if self.tokens[i][0] == "Constant":
-                    RHS = self.tokens[i][1]
-                    i += 2
-                else:
-                    RHS = self.tokens[i+1][1]
-                    i += 3
+                # if self.tokens[i][0] == "Constant":
+                RHS = self.tokens[i][1]
+                i += 2
+                # else:
+                #     RHS = self.tokens[i+1][1]
+                #     i += 3
                 
                 asm.write(f'\tmov rax, qword [{LHS}]\n')
                 asm.write(f'\tcmp rax, [{RHS}]\n')

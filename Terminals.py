@@ -1,6 +1,6 @@
 
 PUNCTUATOR = ['(', ')', ";", '"', ':']
-OPERATOR = ['=', '-', "+", "*", "/", "==", "<=", ">="]
+OPERATOR = ['=', '-', "+", "*", "/", "==", "<=", ">=", "<", ">", "!="]
 
 def Terminal(token, symbols, literals):
     if type(token) == list:

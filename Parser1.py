@@ -2,13 +2,18 @@ class Parser:
     def __init__(self, Scanner):
         self.tokens = Scanner.tokenStream()
         self.pos = 0
+        self.conditional = False
         self.loop = False
+        self.assignment = False
         self.Scanner = Scanner
         self.keywords = {   "r": "rizz", "b": "skibidi", "f": "fanumTax", "g": "galvanized", "h": "alpha",
                             "e": "beta", "m": "sigma", "n": "goon", "ed": "edge", "buss": "buss" ,"\"": "\"",
                             ";": ";", ":": ":", "(": "(", ")": ")"
                         }
     
+    def isValidIdentifier(self, token: str):
+        return token.isidentifier() and token not in self.keywords.keys()
+
     def parse(self):
         try:
             self.S()
@@ -58,6 +63,10 @@ class Parser:
                 self.C()
             elif self.tokens[self.pos] == 'int':
                 self.T()
+            elif self.tokens[self.pos] == 'ed':
+                self.L()
+            elif self.tokens[self.pos] == 'buss' and self.loop:
+                return
             else:
                 print(f"what position ? {self.pos}")
                 # raise SyntaxError("Expected P, D, O, I, T, or C")
@@ -70,7 +79,7 @@ class Parser:
     def P(self):
         self.match('r')
         self.P_prime()
-        if self.loop:
+        if self.conditional:
             return
         self.S_prime()
 
@@ -79,12 +88,13 @@ class Parser:
             self.match('"')
             self.match2("w")
             self.match('"')
-            self.match(";")
-        elif self.tokens[self.pos] == 'int':
-            self.T()
+        elif self.pos < len(self.tokens) and self.tokens[self.pos][0] == 'd':
+            self.match2('d')
+        elif self.tokens[self.pos] in self.Scanner.symbolTable.keys():
             self.var()
-            self.match(";")
-        # ε is handled by doing nothing
+        else:
+            raise SyntaxError("Expected string or variable")
+        self.match(";")
 
     def S_prime(self):
         self.checkTokens()    
@@ -104,19 +114,23 @@ class Parser:
     def O(self):
         self.match('f')
         self.match('(')
-        if self.tokens[self.pos] == 'int':
-            self.T()
-            self.var()
-            self.Op()
-            self.T()
-            self.var()
-        else:
-            self.d()
-            self.Op()
-            self.d()
+        # if self.tokens[self.pos] == 'int':
+        #     self.T()
+        #     self.var()
+        #     self.Op()
+        #     self.T()
+        #     self.var()
+        # else:
+        #     self.d()
+        #     self.Op()
+        #     self.d()
+        self.Cmp()
+        self.Op()
+        self.Cmp()
         self.match(')')
-        if self.loop:
+        if self.conditional or self.assignment:
             return
+        self.match(';')
         self.S_prime()
 
     def Op(self):
@@ -131,14 +145,16 @@ class Parser:
         self.var()
         self.A()
         self.match(";")
-        if self.loop:
+        if self.conditional:
             return
         self.S_prime()
 
     def A(self):
         if self.pos < len(self.tokens) and self.tokens[self.pos] == '=':
             self.match('=')
+            self.assignment = True
             self.A_prime()
+            self.assignment = False
         # ε is handled by doing nothing
 
     def A_prime(self):
@@ -151,16 +167,15 @@ class Parser:
                 self.T()
                 self.var()
     
-
     def C(self):
-        self.loop = True
+        self.conditional = True
         self.H()
         self.checkBlockStatements()
         if self.tokens[self.pos] != 'n':
             self.H_prime()
         self.match('n')
         self.match(";")
-        self.loop = False
+        self.conditional = False
         self.S_prime()
 
     def H(self):
@@ -230,9 +245,43 @@ class Parser:
                 return
             elif self.tokens[self.pos] == 'n':
                 return
+            elif self.tokens[self.pos] == 'buss':
+                return
             else:
                 self.B()
         # ε is handled by doing nothing
+    
+    def L(self):
+        self.loop = True
+        self.match("ed")
+        self.Cmp()
+        self.RelOp()
+        self.Cmp()
+        self.match(":")
+        self.B()
+        self.match("buss")
+        self.match(";")
+        self.loop = False
+    
+    
+    def Cmp(self):
+        if self.pos < len(self.tokens) and self.tokens[self.pos][0] == "d":
+            self.d()
+        elif self.pos < len(self.tokens) and self.isValidIdentifier(self.tokens[self.pos]):
+            self.var()
+        else:
+            raise SyntaxError(f"Expected variable or constant not \"{self.tokens[self.pos]}\"")
+    
+    def RelOp(self):
+        print(self.tokens[self.pos])
+        for item in ("<", ">", "<=", ">=", "!=", "=="):
+            try:
+                self.match(item)
+                return
+            except:
+                continue
+        raise SyntaxError("Expected Reltional Operator")
+
 
     def match(self, token_type):
         if self.pos < len(self.tokens) and self.tokens[self.pos] == token_type:
