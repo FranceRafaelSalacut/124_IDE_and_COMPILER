@@ -21,13 +21,16 @@ class CodeGenerator:
         asm.write('bits 64\n')
         asm.write("default rel\n")
         asm.write('section .bss\n')
+        asm.write('\ttmp resq 1\n')
         for key, value in self.symbolTable.items():
             asm.write(f'\t{key} {"resq" if value == "int" else "resb"} 1\n' )
         asm.write('section .data\n')
         asm.write('\tfmt db \"%d\", 10, 0\n')
+        asm.write('\tmt db \"\", 0\n')
         asm.write('\tintfmt db \"%d\", 0\n')
         asm.write('\tcharfmt db \"%c\", 0\n')
         asm.write('\tstrfmt db \"%s\", 0\n')
+        asm.write('\tendstr db \"Gyatt has finished execution. Enter any number to continue.", 10, 0\n')
         for key, value in self.literalTable.items():
             if key.startswith('w'):
                 if '\\x' in value:
@@ -213,7 +216,17 @@ class CodeGenerator:
             else:
                 i+=1
                 asm.write('\n')
-            
+        
+        asm.write("; EXIT\n")
+        asm.write(f'\tlea rcx, [endstr]\n')
+        asm.write('\txor rax, rax\n')
+        asm.write('\tcall printf\n')
+
+        asm.write(f'\tlea rcx, intfmt\n')
+        asm.write(f'\tlea rdx, [tmp]\n')
+        asm.write('\txor rax, rax\n')
+        asm.write('\tcall scanf\n')
+
         asm.write('\n\txor rax, rax\n')
         asm.write('\tcall ExitProcess\n')
         asm.close()
