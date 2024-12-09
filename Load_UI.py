@@ -8,11 +8,14 @@ from tkinter import filedialog
 from Scanner import Scanner  # Ensure Scanner is properly imported
 from Parser1 import Parser
 import sys
+parser = ""
+# cg = ""
 
 from Line_Numbered_Editor import LineNumberedTextEdit
 class MainUI(QMainWindow):
     def __init__(self):
         super(MainUI, self).__init__()
+        self.cg = None
         loadUi('124-Brainrot-Language.ui', self)
         
         # disable certain buttons at start
@@ -221,18 +224,21 @@ class MainUI(QMainWindow):
     def Compile(self):
     # Step 1: Get code from the Code_Area
         self.Code = self.Code_Area.toPlainText()
+        
         print(self.Code)
         # Step 2: Tokenize the code using the Scanner
-        
+    
         print(self.Code.split('\n'))
         scanner = Scanner(self.Code.split('\n'))
+      
         
         # Step 3: Initialize the Parser with the Scanner
         parser = Parser(scanner)
-        
+    
         # Step 4: Parse the code
         message = parser.parse()
         if message != 1:
+            # print("here is: "+ message)
             print(f"Message: {message}")  # Check the content of `message`
             self.consoleEditor = self.findChild(QTextEdit, "consoleEditor")
             if not self.consoleEditor:
@@ -277,7 +283,8 @@ class MainUI(QMainWindow):
         
         # Step 5 (Optional): Initialize the CodeGenerator and compile the code
         from compiler.code_generator import CodeGenerator
-        cg = CodeGenerator(
+        
+        self.cg = CodeGenerator(
             parser.Scanner.tokens, 
             parser.Scanner.symbolTable, 
             parser.Scanner.literalTable, 
@@ -286,9 +293,18 @@ class MainUI(QMainWindow):
         #cg.compile()
         #cg.run()
 
+    # def Execute(self):
+    #     print(self.Code)
     def Execute(self):
-        print(self.Code)
     
+        try:
+            self.cg.compile()
+            self.cg.run()  # Execute the generated code
+        except Exception as e:
+            print(f"Error while executing code: {e}")
+
+
+        
     def Save(self):
         if(self.Current_File):
             file = open(self.Current_File, "w")
