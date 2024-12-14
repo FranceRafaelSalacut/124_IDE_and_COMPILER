@@ -17,7 +17,7 @@ class CodeGenerator:
         conditional = ""
         nthConditional = -1
         nthLoop = -1
-        asm = open('compiler/test.asm', 'w')
+        asm = open(f'{self.filepath[:-5]}asm', 'w')
         asm.write('bits 64\n')
         asm.write("default rel\n")
         asm.write('section .bss\n')
@@ -232,15 +232,20 @@ class CodeGenerator:
         asm.close()
     
     def compile(self):
+        os.system(f"cls")
         print("[CMD] Assembling")
         self.generateMachineCode()
-        os.system(f"nasm -f elf64 compiler/test.asm")
-        # os.remove("compiler/test.asm")
+        os.system(f"nasm -f elf64 \"{self.filepath[:-5]}asm\"")
+        os.remove(f"{self.filepath[:-5]}asm")
         print("[CMD] Linking")
-        os.system(f"gcc -o compiler/test.exe compiler/test.o")
-        os.remove("compiler/test.o")
+        os.system(f"gcc -o \"{self.filepath[:-5]}exe\" \"{self.filepath[:-5]}o\"")
+        os.remove(f"{self.filepath[:-5]}o")
     
     def run(self):
         print("[CMD] Running")
-        subprocess.run("compiler/test.exe")
-        # os.system("start compiler\\test.exe")
+        # result = subprocess.run(f"\"{self.filepath[:-5]}exe\"")
+        print("run run run")
+        os.system(f"start \"{self.filepath[:-5]}exe\" \"{self.filepath[:-5]}exe\"")
+
+        # Output captured stdout
+        # print("STDOUT:", result.stdout)

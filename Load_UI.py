@@ -6,7 +6,8 @@ from PyQt5.uic import loadUi
 from tkinter import *
 from tkinter import filedialog
 from Scanner import Scanner  # Ensure Scanner is properly imported
-from Parser1 import Parser
+from Parser import Parser
+from compiler.code_generator import CodeGenerator
 import sys
 parser = ""
 # cg = ""
@@ -33,6 +34,7 @@ class MainUI(QMainWindow):
         
         # check if file saved
         self.Is_Saved = True
+        self.Is_Compiled = False
         self.Unsaved_Label = " (Unsaved changes)"
 
         # editor states
@@ -154,6 +156,8 @@ class MainUI(QMainWindow):
             prompt: str = self.CurrentFileName.text() + self.Unsaved_Label
             self.CurrentFileName.setText(prompt)
             self.Is_Saved = False
+        
+        self.Is_Compiled = False
 
     def New_File(self):
         if not self.Prompt_Save_Changes():
@@ -215,28 +219,26 @@ class MainUI(QMainWindow):
             # container.setLayout(None)  # Clear the layout from the main widget
         container.setStyleSheet("QWidget{background: transparent;}")
 
-    # def Compile(self):
-    #     self.Code =  self.Code_Area.toPlainText()
-    #     # Compiler(self.Code, Current_File)
-
-    #     print(self.Code)
-    #     print(self.Current_File)
     def Compile(self):
-    # Step 1: Get code from the Code_Area
+        if not self.Prompt_Save_Changes():
+            return
+        # Step 1: Get code from the Code_Area
         self.Code = self.Code_Area.toPlainText()
+
+        if self.Current_File.split('.')[-1] != "gyatt":
+            message = "What the SIGMA! Only .gyatt files can be compiled here"
+        else:
+            # Step 2: Tokenize the code using the Scanner
         
-        print(self.Code)
-        # Step 2: Tokenize the code using the Scanner
-    
-        print(self.Code.split('\n'))
-        scanner = Scanner(self.Code.split('\n'))
-      
+            print(self.Code.split('\n'))
+            scanner = Scanner(self.Code.split('\n'))
         
-        # Step 3: Initialize the Parser with the Scanner
-        parser = Parser(scanner)
-    
-        # Step 4: Parse the code
-        message = parser.parse()
+            # Step 3: Initialize the Parser with the Scanner
+            parser = Parser(scanner)
+
+            # Step 4: Parse the code
+            message = parser.parse()
+
         if message != 1:
             # print("here is: "+ message)
             print(f"Message: {message}")  # Check the content of `message`
@@ -261,50 +263,50 @@ class MainUI(QMainWindow):
 
             cursor.setCharFormat(default_format)
             self.consoleEditor.update()  # Force update
-        else:
-            cursor = self.consoleEditor.textCursor()
-            cursor.movePosition(cursor.End)
-            default_format = self.consoleEditor.currentCharFormat()
-            error_format = QTextCharFormat()
-            error_format.setForeground(QColor("#7CFC00"))
-            cursor.setCharFormat(error_format)
+            return
 
-            cursor.insertText("Compile succesful\n")
+        cursor = self.consoleEditor.textCursor()
+        cursor.movePosition(cursor.End)
+        default_format = self.consoleEditor.currentCharFormat()
+        pass_format = QTextCharFormat()
+        pass_format.setForeground(QColor("#7CFC00"))
+        cursor.setCharFormat(pass_format)
 
-            cursor.setCharFormat(default_format)
-            self.consoleEditor.update()  # Force update
-
-
-
-
-        #     print("Parsing completed successfully!")
-        # except Exception as e:
-        #     print("An error occurred during parsing:", e)
-        
         # Step 5 (Optional): Initialize the CodeGenerator and compile the code
-        from compiler.code_generator import CodeGenerator
         
         self.cg = CodeGenerator(
             parser.Scanner.tokens, 
             parser.Scanner.symbolTable, 
             parser.Scanner.literalTable, 
-            None
+            self.Current_File
         )
-        #cg.compile()
-        #cg.run()
 
-    # def Execute(self):
-    #     print(self.Code)
-    def Execute(self):
-    
-        try:
+        if not self.Is_Compiled:
+            cursor.insertText("[CMD] Compiling\n")
             self.cg.compile()
-            self.cg.run()  # Execute the generated code
-        except Exception as e:
-            print(f"Error while executing code: {e}")
-
-
+            cursor.insertText("[CMD] Linking\n")
+            self.Is_Compiled = True
+            cursor.insertText("Compile succesful\n")
+        else:
+            cursor.insertText("Code was compiled already\n")
         
+        cursor.setCharFormat(default_format)
+        self.consoleEditor.update()  # Force update
+
+
+    def Execute(self):
+        if not self.Is_Compiled:
+            self.Compile()
+
+        cursor = self.consoleEditor.textCursor()
+        cursor.movePosition(cursor.End)
+        default_format = self.consoleEditor.currentCharFormat()
+        pass_format = QTextCharFormat()
+        pass_format.setForeground(QColor("#7CFC00"))
+        cursor.setCharFormat(pass_format)
+        cursor.insertText("[CMD] Running\n")
+        self.cg.run()  # Execute the generated code
+
     def Save(self):
         if(self.Current_File):
             file = open(self.Current_File, "w")
@@ -404,4 +406,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except:
+        print("Error as occured")

@@ -1,262 +1,337 @@
-def S():
-    if P():
-        return True
+class Parser:
+    def __init__(self, Scanner):
+        self.tokens = Scanner.tokenStream()
+        self.pos = 0
+        self.conditional = False
+        self.loop = False
+        self.assignment = False
+        self.Scanner = Scanner
+        self.keywords = {   "r": "rizz", "b": "skibidi", "f": "fanumTax", "g": "galvanized", "h": "alpha",
+                            "e": "beta", "m": "sigma", "n": "goon", "ed": "edge", "buss": "buss" ,"\"": "\"",
+                            ";": ";", ":": ":", "(": "(", ")": ")"
+                        }
     
-    elif D():
-        return True
-    
-    elif O():
-        return True
-    
-    elif I():
-        return True
-    
-    elif T():
-        return True
-    
-    elif C():
-        return True
-    
-    return False
+    def isValidIdentifier(self, token: str):
+        return token.isidentifier() and token not in self.keywords.keys()
 
-def Sprime():
-    if S():
-        return True
-    else:
-        return True
+    def parse(self):
+        try:
+            self.S()
+            if self.pos < len(self.tokens):
+                raise SyntaxError("Unexpected token: {}".format(self.tokens[self.pos]))
+            print("You passed the test")
+            return 1
+        except Exception as e:
+            error_message = (
+                f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos}\n"
+                f"{self.Scanner.code[self.Scanner.currentLine-2]}\n"
+                f"{e}"
+            )
+            return error_message
+            # print(f"Error occurred at line {self.Scanner.currentLine - 1} pos {self.pos - 1}")
+            # print(f"{self.Scanner.code[self.Scanner.currentLine]}\n{e}")
+            
+            # return 
 
-def P():
-    if "r":
-        if(Pprime()):
-            if(";"):
-                if Sprime():
-                    return True
-    return False
+    def fetchTokens(self):
+        tokens = self.Scanner.tokenStream()
+        if not tokens:
+            return
 
-def Pprime():
-    if'"':
-        if w():
-            if('"'):
-                return True
-    elif T():
-        if var():
-            return True
-        
-    return False
+        self.tokens = tokens
+        self.pos = 0
 
-def w():
-    if"w":
-        return True
-    return False
+    def checkTokens(self):
+        if self.pos >= len(self.tokens):
+            self.fetchTokens()    
 
-def T():
-    if"int":
-        return True
-    return False
+    def checkBlockStatements(self):
+        if self.pos >= len(self.tokens):
+            raise SyntaxError("Ermmm what the Sigma! Expected Statements in block. ")
 
-def var():
-    if("var"):
-        return True
-    return False
+    def S(self):
+        if self.pos < len(self.tokens):
+            if self.tokens[self.pos] == 'r':
+                self.P()
+            elif self.tokens[self.pos] == 'g':
+                self.D()
+            elif self.tokens[self.pos] == 'f':
+                self.O()
+            elif self.tokens[self.pos] == 'b':
+                self.I()
+            elif self.tokens[self.pos] == 'h':
+                self.C()
+            elif self.tokens[self.pos] == 'int':
+                self.T()
+            elif self.tokens[self.pos] == 'ed':
+                self.L()
+            elif self.tokens[self.pos] == 'buss' and self.loop:
+                return
+            else:
+                print(f"what position ? {self.pos}")
+                # raise SyntaxError("Expected P, D, O, I, T, or C")
+                if self.tokens[self.pos] in self.keywords.keys():
+                    raise SyntaxError(f"Unexpected keyword \"{self.keywords[self.tokens[self.pos]]}\"")
+                else:
+                    raise SyntaxError(f"Invalid keyword \"{self.Scanner.literalTable[self.tokens[self.pos]]}\"")
+        # S' -> ε (do nothing if no valid token)
 
-def I():
-    if b():
-        if T():
-            if var():
-                return True
-    return False
+    def P(self):
+        self.match('r')
+        self.P_prime()
+        if self.conditional:
+            return
+        self.S_prime()
 
-def b():
-    if "b":
-        return True
-    return False
-
-def O():
-    if f():
-        if "(":
-            if d():
-                if OP():
-                    if d():
-                        if ")":
-                            if ";":
-                                return True
-
-    return False
-
-def f():
-    if "f":
-        return True
-    return False 
-
-def d():
-    if "d":
-        return True
-    return False
-
-def OP():
-    if plus():
-        return True
-    elif minus():
-        return True
-    elif multiply():
-        return True
-    elif divide():
-        return True
-    
-    return False
-
-def plus():
-    if "+":
-        return True
-    return False
-
-def minus():
-    if "-":
-        return True
-    return False
-
-def multiply():
-    if "*":
-        return True
-    return False
-
-def divide():
-    if "/":
-        return True
-    return False
-
-def D():
-    if g():
-        if T():
-            if var():
-                if A():
-                    if ";":
-                        if Sprime():
-                            return True
-    return False
-
-def g():
-    if "g":
-        return True
-    return False
-
-def A():
-    if "=":
-        if Aprime():
-            return True
+    def P_prime(self):
+        if self.pos < len(self.tokens) and self.tokens[self.pos] == '"':
+            self.match('"')
+            self.match2("w")
+            self.match('"')
+        elif self.pos < len(self.tokens) and self.tokens[self.pos][0] == 'd':
+            self.match2('d')
+        elif self.tokens[self.pos] in self.Scanner.symbolTable.keys():
+            self.var()
         else:
-            return False
-    else:
-        return True
+            raise SyntaxError("Expected string or variable")
+        self.match(";")
+
+    def S_prime(self):
+        self.checkTokens()    
+        if self.pos < len(self.tokens):
+            self.S()
+
+    def T(self):
+        self.match('int')
+
+    def I(self):
+        self.match('b')
+        self.T()
+        self.var()
+        self.match(';')
+        self.S_prime()
+
+    def O(self):
+        self.match('f')
+        self.match('(')
+        # if self.tokens[self.pos] == 'int':
+        #     self.T()
+        #     self.var()
+        #     self.Op()
+        #     self.T()
+        #     self.var()
+        # else:
+        #     self.d()
+        #     self.Op()
+        #     self.d()
+        self.Cmp()
+        self.Op()
+        self.Cmp()
+        self.match(')')
+        if self.conditional or self.assignment:
+            return
+        self.match(';')
+        self.S_prime()
+
+    def Op(self):
+        if self.tokens[self.pos] in {'+', '-', '*', '/'}:
+            self.match(self.tokens[self.pos])
+        else:
+            raise SyntaxError("Expected operator")
+
+    def D(self):
+        self.match('g')
+        self.T()
+        self.var()
+        self.A()
+        self.match(";")
+        if self.conditional:
+            return
+        self.S_prime()
+
+    def A(self):
+        if self.pos < len(self.tokens) and self.tokens[self.pos] == '=':
+            self.match('=')
+            self.assignment = True
+            self.A_prime()
+            self.assignment = False
+        # ε is handled by doing nothing
+
+    def A_prime(self):
+        if self.pos < len(self.tokens):
+            if self.pos < len(self.tokens) and self.tokens[self.pos] == 'f':
+                self.O()
+            elif self.pos < len(self.tokens) and 'd' in self.tokens[self.pos]:
+                self.d()
+            else:
+                self.T()
+                self.var()
+    
+    def C(self):
+        self.conditional = True
+        self.H()
+        self.checkBlockStatements()
+        if self.tokens[self.pos] != 'n':
+            self.H_prime()
+        self.match('n')
+        self.match(";")
+        self.conditional = False
+        self.S_prime()
+
+    def H(self):
+        self.match('h')
+        self.var()
+        self.match('==')
+        self.d()
+        self.match(':')
+        self.B()
+
+    def H_prime(self):
+        if self.pos < len(self.tokens):
+            self.E()
+            self.checkBlockStatements()
+            if self.tokens[self.pos] == 'n':
+                return
+            self.M_prime()
+        # ε is handled by doing nothing
+
+    def E(self):
+        self.match('e')
+        self.var()
+        self.match('==')
+        self.d()
+        self.match(':')
+        self.B()
+        self.E_prime()
+
+    def E_prime(self):
+        if self.pos < len(self.tokens):
+            if self.tokens[self.pos] == 'm':
+                return
+            elif self.tokens[self.pos] == 'n':
+                return
+            else:
+                self.E()
+        # ε is handled by doing nothing
+
+    def M_prime(self):
+        if self.pos < len(self.tokens):
+            self.M()
+        # ε is handled by doing nothing
+
+    def M(self):
+        self.match('m')
+        self.match(":")
+        self.B()
+
+    def B(self):
+        self.B_prime()
+
+    def B_prime(self):
+        self.S()
+        self.checkTokens()
+        self.F_prime()
+
+    def F(self):
+        self.S()
+        self.F_prime()
+
+    def F_prime(self):
+        if self.pos < len(self.tokens):
+            if self.tokens[self.pos] == 'e':
+                return
+            elif self.tokens[self.pos] == 'm':
+                return
+            elif self.tokens[self.pos] == 'n':
+                return
+            elif self.tokens[self.pos] == 'buss':
+                return
+            else:
+                self.B()
+        # ε is handled by doing nothing
+    
+    def L(self):
+        self.loop = True
+        self.match("ed")
+        self.Cmp()
+        self.RelOp()
+        self.Cmp()
+        self.match(":")
+        self.B()
+        self.match("buss")
+        self.match(";")
+        self.loop = False
+    
+    
+    def Cmp(self):
+        if self.pos < len(self.tokens) and self.tokens[self.pos][0] == "d":
+            self.d()
+        elif self.pos < len(self.tokens) and self.isValidIdentifier(self.tokens[self.pos]):
+            self.var()
+        else:
+            raise SyntaxError(f"Expected variable or constant not \"{self.tokens[self.pos]}\"")
+    
+    def RelOp(self):
+        print(self.tokens[self.pos])
+        for item in ("<", ">", "<=", ">=", "!=", "=="):
+            try:
+                self.match(item)
+                return
+            except:
+                continue
+        raise SyntaxError("Expected Reltional Operator")
 
 
-def Aprime():
-    if O():
-        return True
-    elif d():
-        return True
-    elif T():
-        if var():
-            return True
-    return False
-
-
-def C():
-    if H():
-        if Hprime():
-            return True
-    return False
-
-def H():
-    if h():
-        if "(":
-            if var():
-                if "=":
-                    if d():
-                        if ")":
-                            if B():
-                                return True
-    return False
-
-def h():
-    if "h":
-        return True
-    return False
-
-def Hprime():
-    if E():
-        if Mprime():
-            return True
+    def match(self, token_type):
+        if self.pos < len(self.tokens) and self.tokens[self.pos] == token_type:
+            self.pos += 1
+        else:
+            raise SyntaxError("Expected token: \"{}\"".format(self.keywords[token_type]))
         
-    return False
+    def match2(self, token_type):
+        if self.pos < len(self.tokens) and token_type in self.tokens[self.pos]:
+            self.pos += 1
+        else:
+            raise SyntaxError("Expected token: \"{}\"".format(self.keywords[token_type]))
 
-def E():
-    if e():
-        if "(":
-            if var():
-                if "=":
-                    if d():
-                        if ")":
-                            if B():
-                                if Eprime():
-                                    return True
-    return False
+    def var(self):
+        # Assuming var is a valid identifier
+        if self.pos < len(self.tokens) and not self.tokens[self.pos].isidentifier():
+            raise SyntaxError(f"\"{self.tokens[self.pos]}\" is not a valid identifier.")
+        
+        if self.pos < len(self.tokens) and self.tokens[self.pos] in self.Scanner.symbolTable.keys():
+            self.pos += 1
+        else:
+            raise SyntaxError(f"Expected variable. \"{self.Scanner.literalTable[self.tokens[self.pos]]}\" referenced before declared.")
 
-def Eprime():
-    if E():
-        return True
+    def d(self):
+        # Assuming d is some valid token (could be an identifier or literal)
+        if self.pos < len(self.tokens) and self.tokens[self.pos].isidentifier():
+            self.pos += 1
+        else:
+            raise SyntaxError("Expected d")
+
+# Example usage
+if __name__ == '__main__':
+    from compiler.code_generator import CodeGenerator
+    from Scanner import testing as tt
+
+    # token = []
+    # for x in tt():
+    #     token.append(x[1])
+
+    #print(token)
+
+
+    #print(token[185:])
+
+    #print(len(token))
+    parser = Parser(tt())
+    out = parser.parse()
+    if out == 1:
+        # print(parser.Scanner.tokens)
+        cg = CodeGenerator(parser.Scanner.tokens, parser.Scanner.symbolTable, parser.Scanner.literalTable, None)
+        cg.compile()
+        # cg.run()
     else:
-        return True
-
-def e():
-    if "e":
-        return True
-    return False
-
-def Mprime():
-    if M():
-        return True
-    else: 
-        return True
-
-
-def M(): 
-    if m():
-        if B():
-            return True
-    return False
-
-def m():
-    if "m":
-        return True
-    return False
-
-def B():
-    if "{":
-        if Bprime():
-            if "}":
-                return True
-    return False
-
-def Bprime():
-    if S():
-        if ";":
-            if F():
-                return True
-    return False
-
-def F():
-    if S():
-        if ";":
-            if Fprime():
-                return True
-    return False
-
-def Fprime():
-    if F():
-        return True
-    else:
-        return True
-
-
-
+        print(out)
